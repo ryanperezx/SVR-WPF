@@ -88,6 +88,7 @@ namespace SVR_WPF
                                 genRep[9] = remarks;
                                 lvGenReport.Items.Add(new ListViewGenReport{
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -155,6 +156,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -222,6 +224,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -290,6 +293,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -357,6 +361,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -425,6 +430,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -492,6 +498,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -559,6 +566,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -626,6 +634,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -694,6 +703,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -761,6 +771,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -828,6 +839,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -895,6 +907,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -963,6 +976,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -980,7 +994,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1030,6 +1044,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -1097,6 +1112,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -1164,6 +1180,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -1231,6 +1248,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -1298,6 +1316,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
@@ -1365,6 +1384,7 @@ namespace SVR_WPF
                                 lvGenReport.Items.Add(new ListViewGenReport
                                 {
                                     i = this.i,
+                                    recordNo = int.Parse(genRep[1]),
                                     studNo = genRep[2],
                                     fullName = genRep[3],
                                     residence = genRep[4],
