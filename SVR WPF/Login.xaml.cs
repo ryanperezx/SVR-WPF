@@ -14,8 +14,6 @@ namespace SVR_WPF
     public partial class MainWindow : Window
     {
         string user, pass;
-        bool close;
-
         public MainWindow()
         {
             InitializeComponent();

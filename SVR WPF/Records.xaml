@@ -122,7 +122,7 @@
         <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="18,564,0,0" VerticalAlignment="Top" Width="75" Click="btnAdd_OnClick"/>
         <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="124,564,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_OnClick"/>
         <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="238,564,0,0" VerticalAlignment="Top" Width="75" Click="btnEdit_OnClick"/>
-        <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="345,564,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="345,564,0,0" VerticalAlignment="Top" Width="75" Click="btnDelete_OnClick"/>
 
 
     </Grid>

@@ -36,7 +36,7 @@ namespace SVR_WPF
         string violationType;
         int countInsti, countDepart, countAcademic, countProbi, countLastChance;
         List<String> violationsHolder = new List<String>();
-
+        SqlCeConnection conn = DBUtils.GetDBConnection();
         public Records()
         {
             InitializeComponent();
@@ -164,7 +164,6 @@ namespace SVR_WPF
         }
         private void btnViolateAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtViolate.Text == "")
             {
@@ -336,7 +335,6 @@ namespace SVR_WPF
                 }
                 else
                 {
-                    SqlCeConnection conn = DBUtils.GetDBConnection();
                     conn.Open();
                     using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
                     {
@@ -404,7 +402,6 @@ namespace SVR_WPF
         }
         private void btnSave_OnClick(object sender, RoutedEventArgs e)
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtStudNo.Text == "" || txtLName.Text == "" || txtFName.Text == "" || cmbResidence.Text == "")
             {
@@ -738,7 +735,6 @@ namespace SVR_WPF
             }
             else
             {
-                SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
                 using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
                 {
@@ -769,6 +765,112 @@ namespace SVR_WPF
                     }
                 }
                 conn.Close();
+            }
+        }
+        private void btnDelete_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (txtStudNo.Text == "" || txtLName.Text == "" || txtFName.Text == "" || cmbResidence.Text == "")
+            {
+                MessageBox.Show("Please fill up the missing fields!");
+            }
+            else
+            {
+                if (value == 2)
+                {
+                    string sMessageBoxText = "Do you want to delete this record?";
+                    string sCaption = "Delete Record";
+                    MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
+
+                    MessageBoxResult dr = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
+                    switch (dr)
+                    {
+                        case MessageBoxResult.Yes:
+                            SqlCeConnection conn = DBUtils.GetDBConnection();
+                            conn.Open();
+                            using (SqlCeCommand cnt = new SqlCeCommand("Select COUNT(1) from StudentInfoArchive where studentNo =" + txtStudNo.Text, conn))
+                            {
+                                int studCount;
+                                int check;
+                                if (!int.TryParse(txtStudNo.Text, out check))
+                                {
+                                    MessageBox.Show("Invalid Input!");
+                                    return;
+                                }
+                                else
+                                {
+                                    studCount = (int)cnt.ExecuteScalar();
+                                }
+                                if (studCount > 0)
+                                {
+                                    int studNo = Convert.ToInt32(txtStudNo.Text);
+                                    MessageBox.Show("Student " + txtStudNo.Text + " has an record in the archive! (Student has been deleted before)");
+                                    SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo=" + txtStudNo.Text + ";", conn);
+                                    command.ExecuteNonQuery();
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=" + txtStudNo.Text, conn);
+                                        cmd1.ExecuteNonQuery();
+                                    }
+
+                                    Log = LogManager.GetLogger("studentAlreadyArchived");
+                                    Log.Info("Student: " + txtStudNo.Text + " has an existing record on the archive database");
+
+                                    emptyTextbox();
+                                    emptyComboBox();
+                                    disableFields();
+                                }
+                                else
+                                {
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into StudentInfoArchive(studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti) select studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo=" + txtStudNo.Text, conn);
+                                        int count = command.ExecuteNonQuery();
+                                        if (count == 1)
+                                        {
+                                            MessageBox.Show("User record has been deleted!");
+                                            Log = LogManager.GetLogger("archiveStudent");
+                                            Log.Info(": Archived student no:" + txtStudNo.Text);
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("User does not exist!");
+                                            return;
+                                        }
+                                    }
+                                    int studNo = Convert.ToInt32(txtStudNo.Text);
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=" + txtStudNo.Text, conn);
+                                        cmd1.ExecuteNonQuery();
+                                    }
+
+                                    Log = LogManager.GetLogger("archiveStudent");
+                                    Log.Info(": Archiving student no:" + txtStudNo.Text + " records..");
+
+                                    txtStudNo.IsReadOnly = false;
+                                    emptyTextbox();
+                                    emptyComboBox();
+                                    disableFields();
+                                    conn.Close();
+                                    conn.Dispose();
+                                }
+                            }
+                            conn.Close();
+                            conn.Dispose();
+                            break;
+
+                        case MessageBoxResult.No:
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please click Edit button first to be able to delete!");
+                }
             }
         }
 
@@ -843,7 +945,6 @@ namespace SVR_WPF
 
         private void updateViolations()
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtViolate.Text == "Departmental")
             {

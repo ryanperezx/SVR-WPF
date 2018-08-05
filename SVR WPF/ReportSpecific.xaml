@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVR_WPF"
         mc:Ignorable="d"
-        Title="Report Specific" Height="563" Width="1236"
+        Title="Report" Height="600" Width="1230"
         
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -16,8 +16,37 @@
         FontFamily="{DynamicResource MaterialDesignFont}" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Foreground="White">
+        >
     <Grid>
-        
+        <Label Content="Student Violation Records" HorizontalAlignment="Center" VerticalAlignment="Top"  FontSize="25" Width="321" Height="42" FontWeight="Bold" Margin="450,42,453,487" />
+        <Label Content="Student No. :" VerticalAlignment="Top"  FontSize="16" Width="122" Height="28" Margin="129,96,973,0" />
+        <Label Content="Residence Status :"  VerticalAlignment="Top"  FontSize="16" Width="160" Height="29" Margin="91,127,973,0" />
+        <Label Content="Full Name :" VerticalAlignment="Top"  FontSize="16" Width="102" Height="28" Margin="703,96,419,0" />
+        <TextBox x:Name="txtStudNo" HorizontalAlignment="Left" Height="27" Margin="256,96,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="140" IsReadOnly="True" RenderTransformOrigin="0.529,1.31"/>
+        <TextBox x:Name="txtResidence" HorizontalAlignment="Left" Height="26" Margin="256,127,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="140" IsReadOnly="True"/>
+        <TextBox x:Name="txtFullName" HorizontalAlignment="Left" Height="26" Margin="810,96,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="188" IsReadOnly="True"/>
+        <ListView x:Name="lvSpeReport" Height="287" Margin="65,160,65,0" VerticalAlignment="Top">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding i}"/>
+                    <GridViewColumn Header="Record No." Width="100" DisplayMemberBinding="{Binding recordNo}"/>
+                    <GridViewColumn Header="Date Committed" Width="150" DisplayMemberBinding="{Binding dateCommitted}"/>
+                    <GridViewColumn Header="Period" Width="110" DisplayMemberBinding="{Binding period}"/>
+                    <GridViewColumn Header="School Year" Width="130" DisplayMemberBinding="{Binding schoolYear}"/>
+                    <GridViewColumn Header="Violation Code" Width="120" DisplayMemberBinding="{Binding violationCode}"/>
+                    <GridViewColumn Header="Violation Type" Width="130" DisplayMemberBinding="{Binding violationType}"/>
+                    <GridViewColumn Header="Violation Name" Width="130" DisplayMemberBinding="{Binding violationName}"/>
+                    <GridViewColumn Header="Remarks" Width="150" DisplayMemberBinding="{Binding remarks}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="No. of Institutional Violation :" HorizontalAlignment="Left" Margin="65,452,0,0"  FontSize="15" VerticalAlignment="Top"/>
+        <Label Content="No. of Academic Violation :" HorizontalAlignment="Left" Margin="438,452,0,87"  FontSize="15" VerticalAlignment="Top" Height="32"/>
+        <Label Content="No. of Departmental Violation :" HorizontalAlignment="Left" Margin="794,452,0,0"  FontSize="15" VerticalAlignment="Top" Height="34"/>
+        <TextBox x:Name="txtInstiViolation" HorizontalAlignment="Left" Height="32" Margin="274,448,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <TextBox x:Name="txtAcademicViolation" HorizontalAlignment="Left" Height="32" Margin="633,447,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <TextBox x:Name="txtDepartViolation" HorizontalAlignment="Left" Height="32" Margin="1015,447,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <Button x:Name="btnGenReport" Content="Generate Report" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="50" Margin="493,500,491,10" Click="btnGenReport_Click"/>
+
     </Grid>
 </Window>

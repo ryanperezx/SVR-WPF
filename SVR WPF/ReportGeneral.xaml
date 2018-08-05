@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVR_WPF"
         mc:Ignorable="d"
-        Title="ReportGeneral" Height="563" Width="1236"
+        Title="Report" Height="563" Width="1236"
         
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"

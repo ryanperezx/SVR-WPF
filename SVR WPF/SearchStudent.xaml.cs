@@ -16,6 +16,7 @@ namespace SVR_WPF
     /// </summary>
     public partial class SearchStudent : Page
     {
+        SqlCeConnection conn = DBUtils.GetDBConnection();
         public SearchStudent()
         {
             InitializeComponent();
@@ -37,7 +38,6 @@ namespace SVR_WPF
         }
         private void updateViolations()
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtViolate.Text == "Departmental")
             {
@@ -59,6 +59,7 @@ namespace SVR_WPF
                 }
             }
             else if (txtViolate.Text == "Institutional")
+            {
                 using (SqlCeCommand sql = new SqlCeCommand("Select ViolationType, ViolationName from ViolationDetails where ViolationType ='Institutional'", conn))
                 {
                     using (DbDataReader reader = sql.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -75,6 +76,7 @@ namespace SVR_WPF
                         }
                     }
                 }
+            }
             else if (txtViolate.Text == "Academic")
             {
                 using (SqlCeCommand sql = new SqlCeCommand("Select ViolationType, ViolationName from ViolationDetails where ViolationType ='Academic'", conn))
@@ -113,14 +115,21 @@ namespace SVR_WPF
             }
             else
             {
-                ReportGeneral rg = new ReportGeneral(cmbPeriod.SelectedValue.ToString(), txtSYFrom.Text, txtSYTo.Text, txtViolationName.Text, txtViolate.Text,  cmbResidence.SelectedValue.ToString());
-                rg.ShowDialog();
+                if (txtViolate.Text != "ALL" && txtViolationName.Text == "")
+                {
+                    MessageBox.Show("Please select from the given Violations!");
+                    cmbViolationName.Focus();
+                }
+                else
+                {
+                    ReportGeneral rg = new ReportGeneral(cmbPeriod.SelectedValue.ToString(), txtSYFrom.Text, txtSYTo.Text, txtViolationName.Text, txtViolate.Text, cmbResidence.SelectedValue.ToString());
+                    rg.ShowDialog();
+                }
             }
         }
 
         private void btnSpeGenReport_Click(object sender, RoutedEventArgs e)
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
             {
