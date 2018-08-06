@@ -15,8 +15,8 @@ namespace SVR_WPF
         int i = 1;
         int row = 1, column = 8;
         string[] records = new string[8];
-
         SqlCeConnection conn = DBUtils.GetDBConnection();
+
         public ReportSpecific(int studNo)
         {
             InitializeComponent();
@@ -217,7 +217,6 @@ namespace SVR_WPF
                         for (r = 2; r <= row; r++)
                         {
                             int i = 0;
-
                             dr.Read();
                             for (c = 1; c <= column; c++)
                             {

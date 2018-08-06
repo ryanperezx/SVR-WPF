@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Word = Microsoft.Office.Interop.Word;
 using System.Data.SqlServerCe;
+using System.Reflection;
 
 
 namespace SVR_WPF
@@ -19,7 +21,11 @@ namespace SVR_WPF
         public string violationName;
         public string cmbAcad, cmbDepart, cmbInsti;
         int i = 1;
+        int row = 1, column = 9;
         string[] genRep = new string[10];
+        SqlCeConnection conn = DBUtils.GetDBConnection();
+
+
         public ReportGeneral(string period, string syFrom, string syTo, string violationName, string violationType, string residence)
         {
             this.period = period;
@@ -38,7 +44,6 @@ namespace SVR_WPF
 
         private void updateListView()
         {
-            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (violationType == "Academic" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
@@ -100,6 +105,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -166,6 +172,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -232,6 +239,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -298,6 +306,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -365,6 +374,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -431,6 +441,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -497,6 +508,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -565,6 +577,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -632,6 +645,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -698,6 +712,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -764,6 +779,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -830,6 +846,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -896,6 +913,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -962,6 +980,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1028,6 +1047,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1095,6 +1115,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1161,6 +1182,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1227,6 +1249,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1293,6 +1316,7 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
                                 i++;
                             }
                         }
@@ -1359,13 +1383,1273 @@ namespace SVR_WPF
                                     violationName = genRep[8],
                                     remarks = genRep[9]
                                 });
+                                row++;
+                                i++;
+                            }
+                        }
+                    }
+                }
+            }
+            conn.Close();
+        }
+
+        private void btnGenReport_Click(object sender, RoutedEventArgs e)
+        {
+            object oMissing = Missing.Value;
+            object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+
+            //Start Word and create a new document.
+            Word._Application oWord;
+            Word._Document oDoc;
+            oWord = new Word.Application();
+            oWord.Visible = true;
+            oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
+            ref oMissing, ref oMissing);
+
+            //Insert a paragraph at the beginning of the document.
+            Word.Paragraph oPara1;
+            oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
+            if (violationName == null || violationName == "")
+            {
+                oPara1.Range.Text = "Violation Type: " + violationType;
+
+            }
+            else
+            {
+                oPara1.Range.Text = "Violation Type: " + violationType + " Violation Name: " + violationName;
+
+            }
+            oPara1.Range.Font.Size = 18;
+            oPara1.Range.Font.Bold = 1;
+            oPara1.Format.SpaceAfter = 1;    //1 pt spacing after paragraph.
+            oPara1.Range.InsertParagraphAfter();
+
+            //Insert a paragraph at the end of the document.
+            Word.Paragraph oPara2;
+            object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
+            oPara2.Range.Text = "Period: " + period + "  SY: " + syFrom + "-" + syTo;
+            oPara1.Range.Font.Bold = 0;
+            oPara2.Range.Font.Size = 14;
+
+            oPara2.Format.SpaceAfter = 1;
+            oPara2.Range.InsertParagraphAfter();
+
+            //Insert another paragraph.
+            Word.Paragraph oPara3;
+            oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oPara3 = oDoc.Content.Paragraphs.Add(ref oRng);
+            oPara3.Range.Text = "Residence Status: " + residence;
+            oPara3.Format.SpaceAfter = 24;
+            oPara3.Range.Font.Size = 11;
+            oPara3.Range.InsertParagraphAfter();
+
+            //Insert a row x column table, fill it with data, and make the first row bold.
+            Word.Table oTable;
+            Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+            oTable = oDoc.Tables.Add(wrdRng, row, column, ref oMissing, ref oMissing);
+
+            oTable.Range.ParagraphFormat.SpaceAfter = 6;
+            int r, c;
+            string strText;
+            oTable.Cell(1, 1).Range.Text = "Record No.";
+            oTable.Cell(1, 2).Range.Text = "Student No.";
+            oTable.Cell(1, 3).Range.Text = "Full Name";
+            oTable.Cell(1, 4).Range.Text = "Residence";
+            oTable.Cell(1, 5).Range.Text = "Date Committed";
+            oTable.Cell(1, 6).Range.Text = "Violation Code";
+            oTable.Cell(1, 7).Range.Text = "Violation Type";
+            oTable.Cell(1, 8).Range.Text = "Violation Name";
+            oTable.Cell(1, 9).Range.Text = "Remarks";
+
+            conn.Open();
+            if (violationType == "Academic" && violationName == "ALL" && residence == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (ViolationType = 'Academic')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        if (reader.HasRows)
+                        {
+                            for (r = 2; r <= row; r++)
+                            {
+                                int i = 0;
+                                reader.Read();
+                                for (c = 1; c <= column; c++)
+                                {
+                                    //1
+                                    int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                    //2
+                                    int studNoIndex = reader.GetOrdinal("StudentNo");
+                                    int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                    //3
+                                    int fullNameIndex = reader.GetOrdinal("Full Name");
+                                    string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                    //4
+                                    int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                    string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                    //5
+                                    int dateIndex = reader.GetOrdinal("dateCommitted");
+                                    DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                    string date = myDate.ToString("MM/dd/yyyy");
+                                    //6
+                                    int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                    int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                    //7
+                                    int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                    string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                    //8
+                                    int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                    string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                    //9
+                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                    string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                    genRep[0] = recordNo.ToString();
+                                    genRep[1] = studNo.ToString();
+                                    genRep[2] = fullName;
+                                    genRep[3] = residence;
+                                    genRep[4] = date;
+                                    genRep[5] = violationCode.ToString();
+                                    genRep[6] = violationType;
+                                    genRep[7] = violationName;
+                                    genRep[8] = remarks;
+                                    strText = genRep[i];
+                                    oTable.Cell(r, c).Range.Text = strText;
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Academic" && violationName == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Academic" && violationName == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Academic" && violationName == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Academic')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Institutional" && violationName == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Institutional" && violationName == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Institutional')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            if (reader.HasRows)
+                            {
+                                for (r = 2; r <= row; r++)
+                                {
+                                    int i = 0;
+                                    reader.Read();
+                                    for (c = 1; c <= column; c++)
+                                    {
+                                        //1
+                                        int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                        //2
+                                        int studNoIndex = reader.GetOrdinal("StudentNo");
+                                        int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                        //3
+                                        int fullNameIndex = reader.GetOrdinal("Full Name");
+                                        string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                        //4
+                                        int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                        string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                        //5
+                                        int dateIndex = reader.GetOrdinal("dateCommitted");
+                                        DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                        string date = myDate.ToString("MM/dd/yyyy");
+                                        //6
+                                        int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                        int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                        //7
+                                        int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                        string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                        //8
+                                        int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                        string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                        //9
+                                        int remarksIndex = reader.GetOrdinal("remarks");
+                                        string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                        genRep[0] = recordNo.ToString();
+                                        genRep[1] = studNo.ToString();
+                                        genRep[2] = fullName;
+                                        genRep[3] = residence;
+                                        genRep[4] = date;
+                                        genRep[5] = violationCode.ToString();
+                                        genRep[6] = violationType;
+                                        genRep[7] = violationName;
+                                        genRep[8] = remarks;
+                                        strText = genRep[i];
+                                        oTable.Cell(r, c).Range.Text = strText;
+                                        i++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "Departmental" && violationName == "ALL" && period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+                            }
+                        }
+                    }
+
+                }
+            }
+            else if (violationType == "Departmental" && violationName == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Departmental')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            for (r = 2; r <= row; r++)
+                            {
+                                int i = 0;
+                                reader.Read();
+                                for (c = 1; c <= column; c++)
+                                {
+                                    //1
+                                    int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                    //2
+                                    int studNoIndex = reader.GetOrdinal("StudentNo");
+                                    int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                    //3
+                                    int fullNameIndex = reader.GetOrdinal("Full Name");
+                                    string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                    //4
+                                    int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                    string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                    //5
+                                    int dateIndex = reader.GetOrdinal("dateCommitted");
+                                    DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                    string date = myDate.ToString("MM/dd/yyyy");
+                                    //6
+                                    int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                    int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                    //7
+                                    int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                    string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                    //8
+                                    int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                    string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                    //9
+                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                    string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                    genRep[0] = recordNo.ToString();
+                                    genRep[1] = studNo.ToString();
+                                    genRep[2] = fullName;
+                                    genRep[3] = residence;
+                                    genRep[4] = date;
+                                    genRep[5] = violationCode.ToString();
+                                    genRep[6] = violationType;
+                                    genRep[7] = violationName;
+                                    genRep[8] = remarks;
+                                    strText = genRep[i];
+                                    oTable.Cell(r, c).Range.Text = strText;
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            else if (period == "ALL" && violationType == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            for (r = 2; r <= row; r++)
+                            {
+                                int i = 0;
+                                reader.Read();
+                                for (c = 1; c <= column; c++)
+                                {
+                                    //1
+                                    int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                    //2
+                                    int studNoIndex = reader.GetOrdinal("StudentNo");
+                                    int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                    //3
+                                    int fullNameIndex = reader.GetOrdinal("Full Name");
+                                    string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                    //4
+                                    int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                    string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                    //5
+                                    int dateIndex = reader.GetOrdinal("dateCommitted");
+                                    DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                    string date = myDate.ToString("MM/dd/yyyy");
+                                    //6
+                                    int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                    int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                    //7
+                                    int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                    string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                    //8
+                                    int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                    string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                    //9
+                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                    string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                    genRep[0] = recordNo.ToString();
+                                    genRep[1] = studNo.ToString();
+                                    genRep[2] = fullName;
+                                    genRep[3] = residence;
+                                    genRep[4] = date;
+                                    genRep[5] = violationCode.ToString();
+                                    genRep[6] = violationType;
+                                    genRep[7] = violationName;
+                                    genRep[8] = remarks;
+                                    strText = genRep[i];
+                                    oTable.Cell(r, c).Range.Text = strText;
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (period == "ALL" && violationType == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        {
+                            for (r = 2; r <= row; r++)
+                            {
+                                int i = 0;
+                                reader.Read();
+                                for (c = 1; c <= column; c++)
+                                {
+                                    //1
+                                    int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                    //2
+                                    int studNoIndex = reader.GetOrdinal("StudentNo");
+                                    int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                    //3
+                                    int fullNameIndex = reader.GetOrdinal("Full Name");
+                                    string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                    //4
+                                    int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                    string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                    //5
+                                    int dateIndex = reader.GetOrdinal("dateCommitted");
+                                    DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                    string date = myDate.ToString("MM/dd/yyyy");
+                                    //6
+                                    int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                    int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                    //7
+                                    int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                    string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                    //8
+                                    int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                    string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                    //9
+                                    int remarksIndex = reader.GetOrdinal("remarks");
+                                    string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                    genRep[0] = recordNo.ToString();
+                                    genRep[1] = studNo.ToString();
+                                    genRep[2] = fullName;
+                                    genRep[3] = residence;
+                                    genRep[4] = date;
+                                    genRep[5] = violationCode.ToString();
+                                    genRep[6] = violationType;
+                                    genRep[7] = violationName;
+                                    genRep[8] = remarks;
+                                    strText = genRep[i];
+                                    oTable.Cell(r, c).Range.Text = strText;
+                                    i++;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+            else if (period == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+                            }
+                            
+                        }
+                    }
+                }
+            } //
+
+            else if (violationType == "ALL" && residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (violationType == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (period == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
                                 i++;
                             }
                         }
                     }
                 }
             } //
-            conn.Close();
+            else if (residence == "ALL")
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                {
+                    using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        for (r = 2; r <= row; r++)
+                        {
+                            int i = 0;
+                            reader.Read();
+                            for (c = 1; c <= column; c++)
+                            {
+                                //1
+                                int recordNo = Convert.ToInt32(reader.GetValue(0));
+                                //2
+                                int studNoIndex = reader.GetOrdinal("StudentNo");
+                                int studNo = Convert.ToInt32(reader.GetValue(studNoIndex));
+                                //3
+                                int fullNameIndex = reader.GetOrdinal("Full Name");
+                                string fullName = Convert.ToString(reader.GetValue(fullNameIndex));
+                                //4
+                                int residenceIndex = reader.GetOrdinal("ResidenceStatus");
+                                string residence = Convert.ToString(reader.GetValue(residenceIndex));
+                                //5
+                                int dateIndex = reader.GetOrdinal("dateCommitted");
+                                DateTime myDate = Convert.ToDateTime(reader.GetValue(dateIndex));
+                                string date = myDate.ToString("MM/dd/yyyy");
+                                //6
+                                int violationCodeIndex = reader.GetOrdinal("ViolationCode");
+                                int violationCode = Convert.ToInt32(reader.GetValue(violationCodeIndex));
+                                //7
+                                int violationTypeIndex = reader.GetOrdinal("ViolationType");
+                                string violationType = Convert.ToString(reader.GetValue(violationTypeIndex));
+                                //8
+                                int violationNameIndex = reader.GetOrdinal("ViolationName");
+                                string violationName = Convert.ToString(reader.GetValue(violationNameIndex));
+                                //9
+                                int remarksIndex = reader.GetOrdinal("remarks");
+                                string remarks = Convert.ToString(reader.GetValue(remarksIndex));
+                                genRep[0] = recordNo.ToString();
+                                genRep[1] = studNo.ToString();
+                                genRep[2] = fullName;
+                                genRep[3] = residence;
+                                genRep[4] = date;
+                                genRep[5] = violationCode.ToString();
+                                genRep[6] = violationType;
+                                genRep[7] = violationName;
+                                genRep[8] = remarks;
+                                strText = genRep[i];
+                                oTable.Cell(r, c).Range.Text = strText;
+                                i++;
+
+                            }
+                        }
+                    }
+                }
+            }
+            oTable.Rows[1].Range.Font.Bold = 1;
+
+            wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+
         }
     }
 }

@@ -23,7 +23,7 @@
         <Label x:Name="lblyrStart" Content="lblyrStart" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="51" Height="42" FontWeight="Bold" Margin="559,65,620,427" RenderTransformOrigin="0.526,0.5" />
         <Label Content="-" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="20" Height="42" FontWeight="Bold" Margin="635,65,575,427" RenderTransformOrigin="0.526,0.5" />
         <Label x:Name="lblyrEnd" Content="lblyrEnd" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="56" Height="42" FontWeight="Bold" Margin="674,65,500,427" RenderTransformOrigin="0.526,0.5" />
-        <ListView x:Name="lvGenReport" Height="360" Margin="30,125,30,0" VerticalAlignment="Top">
+        <ListView x:Name="lvGenReport" Height="335" Margin="30,125,30,0" VerticalAlignment="Top">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="#" Width="50" DisplayMemberBinding="{Binding i}"/>
@@ -39,5 +39,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button x:Name="btnGenReport" Content="Generate Report" HorizontalAlignment="Center" Width="142" Margin="544,480,544,14" Height="Auto" Click="btnGenReport_Click"/>
     </Grid>
 </Window>
