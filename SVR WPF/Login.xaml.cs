@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Windows;
-using MaterialDesignThemes;
-using MaterialDesignColors;
 using NLog;
 using System.Data.SqlServerCe;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Windows.Media;
+using MaterialDesignThemes.Wpf;
 namespace SVR_WPF
 {
 
 
     public partial class MainWindow : Window
     {
-        string user, pass;
+        string user;
         public MainWindow()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
-        //main functions
+
         private void btnClick(object sender, RoutedEventArgs e)
         {
             user = txtUser.Text;
-            pass = txtPassword.Password;
             if (txtUser.Text == "" && txtPassword.Password == "")
             {
                 txtUser.Focus();
-                MessageBox.Show("No input!");
+                //DialogHost.Show("test");
+
             }
             else if (txtPassword.Password == "")
             {
@@ -191,41 +187,6 @@ namespace SVR_WPF
                 }
             }
         }
-
-        private void txtUser_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (txtUser.Text == "Username")
-            {
-                txtUser.Foreground = System.Windows.Media.Brushes.Black;
-                txtUser.Text = "";
-            }
-        }
-        private void txtUser_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (txtUser.Text.Length == 0)
-            {
-                txtUser.Foreground = System.Windows.Media.Brushes.DimGray;
-                txtUser.Text = "Username";
-            }
-        }
-        private void txtPassword_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (txtPassword.Password.Length == 0)
-            {
-                txtPassword.Foreground = System.Windows.Media.Brushes.DimGray;
-                txtPassword.Password = "Password";
-            }
-        }
-        private void txtPassword_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (txtPassword.Password == "Password")
-            {
-                txtPassword.Foreground = System.Windows.Media.Brushes.Black;
-                txtPassword.Password = "";
-            }
-        }
-
-
         private void lblForgot_OnClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             txtUser.Text = "";
@@ -236,9 +197,5 @@ namespace SVR_WPF
             ShowDialog();
         }
 
-
-
-
-        //event handlers
     }
 }
