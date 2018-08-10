@@ -18,7 +18,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Foreground="White">
+        Foreground="White" WindowState="Maximized" WindowStyle="None">
 
     <Window.Resources>
         <Storyboard x:Key="MenuOpen">
@@ -44,10 +44,10 @@
             <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
         </EventTrigger>
     </Window.Triggers>
-    
+
     <Grid>
         <!--Triple dot navigation-->
-        <Grid Margin="0,0,0,606" >
+        <Grid Height="75" VerticalAlignment="Top" >
             <Grid.Background>
                 <ImageBrush ImageSource="images/Main Header.png"/>
             </Grid.Background>
@@ -69,7 +69,7 @@
                 <Grid  Height="150" Background="#FF1565C0">
                     <ToggleButton x:Name="ButtonMenu" Width="30" Height="30" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Margin="12,22,12,102" />
                 </Grid>
-                
+
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF363E93">
                     <ListViewItem x:Name="tabRecords"  Height="60" PreviewMouseLeftButtonUp="tabRecords_OnClick" Visibility="Visible">
                         <StackPanel Orientation="Horizontal">
@@ -95,8 +95,8 @@
                 </ListView>
             </StackPanel>
         </Grid>
-        
+
         <!--Frame-->
-        <Frame x:Name="Frame" Source="Records.xaml" Margin="50,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"></Frame>
+        <Frame x:Name="Frame" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Source="Records.xaml" Margin="50,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"></Frame>
     </Grid>
 </Window>

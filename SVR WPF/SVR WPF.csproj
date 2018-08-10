@@ -85,6 +85,7 @@
     <Compile Include="ListViewGenReport.cs" />
     <Compile Include="ListViewSpeReport.cs" />
     <Compile Include="ListViewViolations.cs" />
+    <Compile Include="NotEmptyValidationRule.cs" />
     <Compile Include="Records.xaml.cs">
       <DependentUpon>Records.xaml</DependentUpon>
     </Compile>

@@ -11,15 +11,15 @@
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       Background="{DynamicResource MaterialDesignPaper}"
       TextElement.FontWeight="Regular"
-      TextElement.FontSize="13"
+      TextElement.FontSize="14"
       TextOptions.TextFormattingMode="Ideal" 
       TextOptions.TextRenderingMode="Auto"
-      FontFamily="{DynamicResource MaterialDesignFont}">
+      FontFamily="{DynamicResource MaterialDesignFont}" MinWidth="1036" MinHeight="572">
 
-    <Grid Width="1036" Height="606">
+    <Grid>
         <Grid>
-        <Label Content="Date :" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="18,10,974,570" Width="44" />
-        <DatePicker x:Name="txtDate"  HorizontalAlignment="Left" Margin="62,8,0,0" VerticalAlignment="Top" Panel.ZIndex="1" Width="120"/>
+            <Label Content="Date :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,10,0,0" Width="44" />
+            <DatePicker x:Name="txtDate"  HorizontalAlignment="Left" Margin="62,8,0,0" VerticalAlignment="Top" Panel.ZIndex="1" Width="120"/>
         </Grid>
         <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="10,50,10,0" Panel.ZIndex="-1">
             <StackPanel>
@@ -34,23 +34,23 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <Label Content="Student No :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="82" Margin="0,0,247,0" />
-                        <TextBox x:Name="txtStudNo" TextWrapping="Wrap" KeyDown="txtStudNo_KeyDown" Width="154" Margin="97,0,88,0"/>
+                        <Label Content="Student No :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="87" Margin="0,0,247,28" Grid.RowSpan="2" />
+                        <TextBox x:Name="txtStudNo" TextWrapping="Wrap" KeyDown="txtStudNo_KeyDown" Width="154" Margin="97,0,88,0" MaxLength="9"/>
 
-                        <Label Content="Residence Status :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="113" RenderTransformOrigin="2.779,-0.308" Grid.Column="1" Margin="0,0,215,0" />
+                        <Label Content="Residence Status :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="123" RenderTransformOrigin="2.779,-0.308" Grid.Column="1" Margin="0,0,215,28" Grid.RowSpan="2" />
                         <ComboBox x:Name="cmbResidence" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="154" RenderTransformOrigin="1.461,-3.714" Grid.Column="1" Margin="0,0,56,0">
                             <ComboBoxItem Content="Computer Science"/>
                             <ComboBoxItem Content="Transferee"/>
                             <ComboBoxItem Content="Shifter"/>
                         </ComboBox>
 
-                        <Label Content="Last Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="78" Grid.Row="1" Margin="0,0,251,0" />
+                        <Label Content="Last Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="87" Grid.Row="1" Margin="0,0,247,-4" />
                         <TextBox x:Name="txtLName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Margin="97,0,0,0"/>
 
-                        <Label Content="First Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="78" Grid.Column="1" Grid.Row="1" Margin="0,0,250,0"/>
+                        <Label Content="First Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="84" Grid.Column="1" Grid.Row="1" Margin="0,0,215,1"/>
                         <TextBox x:Name="txtFName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Column="1" Grid.Row="1" Margin="128,0,0,0"/>
 
-                        <Label Content="Middle Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="98" Grid.Row="1" Grid.Column="2" Margin="0,0,231,0"/>
+                        <Label Content="Middle Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="103" Grid.Row="1" Grid.Column="2" Margin="0,0,231,1"/>
                         <TextBox x:Name="txtMName" HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Grid.Column="2" Margin="0,0,72,0"/>
                     </Grid>
                 </Expander>
@@ -67,42 +67,42 @@
                             <RowDefinition Height="173*" />
                             <RowDefinition Height="202*"/>
                         </Grid.RowDefinitions>
-                        <Label Content="Period :" Width="53" Margin="18,36,0,109" HorizontalAlignment="Left"/>
+                        <Label Content="Period :" Width="58" Margin="10,36,0,109" HorizontalAlignment="Left"/>
                         <ComboBox x:Name="cmbPeriod" Width="70" Margin="120,80,0,67" Height="26" HorizontalAlignment="Left" IsReadOnly="True">
                             <ComboBoxItem Content="1st"/>
                             <ComboBoxItem Content="2nd"/>
                             <ComboBoxItem Content="3rd"/>
                         </ComboBox>
-                        <Label Content="SY :" Margin="18,78,0,69" HorizontalAlignment="Left" Width="45" RenderTransformOrigin="0.6,0.769"/>
+                        <Label Content="SY :" Margin="34,80,0,67" HorizontalAlignment="Left" Width="44" RenderTransformOrigin="0.6,0.769"/>
                         <ComboBox x:Name="cmbSY" Width="100" Margin="90,36,0,109" HorizontalAlignment="Left" Height="28" IsReadOnly="True">
                         </ComboBox>
 
-                        <Label Content="Violation Type :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="113" Grid.Column="1" Height="26" Margin="0,0,663,114" />
-                        <ComboBox x:Name="cmbViolate" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="154" RenderTransformOrigin="0.513,3.214" Grid.Column="1" Height="27" Margin="0,0,509,114" IsReadOnly="True">
+                        <Label Content="Violation Type :" Grid.Column="1" Margin="30,33,0,114" HorizontalAlignment="Left" Width="113" />
+                        <ComboBox x:Name="cmbViolate" HorizontalAlignment="Left" VerticalAlignment="Top" Width="154" RenderTransformOrigin="0.513,3.214" Grid.Column="1" Height="27" Margin="143,32,0,0" IsReadOnly="True">
                             <ComboBoxItem Content="Departmental"/>
                             <ComboBoxItem Content="Institutional"/>
                             <ComboBoxItem Content="Academic"/>
                         </ComboBox>
                         <TextBox x:Name="txtViolate" Text="{Binding ElementName=cmbViolate, Path=Text}" TextChanged="cmbViolate_TextChanged" Visibility="Collapsed" Grid.Column="1"/>
 
-                        <Label x:Name="lblViolationType" Content="Violation :" Grid.Column="1" Margin="21,80,663,67"/>
-                        <ComboBox x:Name="cmbViolationType" Grid.Column="1" RenderTransformOrigin="0.513,3.214" Height="28" Margin="134,78,509,67" IsReadOnly="True"/>
+                        <Label x:Name="lblViolationType" Content="Violation :" Grid.Column="1" Margin="21,80,0,67" HorizontalAlignment="Left" Width="122"/>
+                        <ComboBox x:Name="cmbViolationType" Grid.Column="1" RenderTransformOrigin="0.513,3.214" Margin="143,78,0,0" IsReadOnly="True" VerticalAlignment="Top" Height="28" HorizontalAlignment="Left" Width="154"/>
                         <TextBox x:Name="txtViolationType" Text="{Binding ElementName=cmbViolationType, Path=Text}" Visibility="Collapsed" TextChanged="cmbViolationType_TextChanged" Grid.Column="1"/>
-                        <Button x:Name="btnViolateAdd" Content="Add Violation" VerticalAlignment="Top" Click="btnViolateAdd_OnClick" Grid.Column="1" Margin="148,128,509,0"/>
-                        <Label x:Name="lblSpecify" Content="Specify:" Grid.Column="1" Margin="400,33,343,115" Visibility="Hidden"/>
-                        <TextBox x:Name="txtSpecify" RenderTransformOrigin="0.774,-0.04" Grid.Column="1" Margin="466,32,176,115" Visibility="Hidden"/>
-                        <Label x:Name="lblViolationDesc" Content="Violation Description:" Grid.Column="1" Margin="321,80,343,69" Visibility="Hidden"/>
-                        <TextBox x:Name="txtViolationDesc" Margin="466,78,176,67" RenderTransformOrigin="0.774,-0.04" Grid.Column="1" Visibility="Hidden"/>
+                        <Button x:Name="btnViolateAdd" Content="Add Violation" VerticalAlignment="Top" Click="btnViolateAdd_OnClick" Grid.Column="1" Margin="148,128,0,0" HorizontalAlignment="Left" Width="149"/>
+                        <Label x:Name="lblSpecify" Content="Specify:" Grid.Column="1" Margin="400,33,0,115" HorizontalAlignment="Left" Width="63" Visibility="Hidden"/>
+                        <TextBox x:Name="txtSpecify" RenderTransformOrigin="0.774,-0.04" Grid.Column="1" Margin="466,32,0,115" HorizontalAlignment="Left" Width="164" Visibility="Hidden"/>
+                        <Label x:Name="lblViolationDesc" Content="Violation Description:" Grid.Column="1" Margin="321,80,0,69" HorizontalAlignment="Left" Width="142" Visibility="Hidden"/>
+                        <TextBox x:Name="txtViolationDesc" Margin="466,78,0,67" RenderTransformOrigin="0.774,-0.04" Grid.Column="1" HorizontalAlignment="Left" Width="164" Visibility="Hidden"/>
 
-                        <Label x:Name="lblRemarks" Content="Remarks :" RenderTransformOrigin="0.183,0.577" Grid.Row="1" Margin="8,23,134,143" />
+                        <Label x:Name="lblRemarks" Content="Remarks :" RenderTransformOrigin="0.183,0.577" Grid.Row="1" Margin="8,23,134,149" />
                         <TextBox x:Name="txtRemarks" Grid.Row="1" Margin="85,10,10,158" RenderTransformOrigin="0.33,0.739" IsReadOnly="True"/>
-                        <Label x:Name="lblLastChance" Content="Last Chance :" Grid.Row="1" Margin="10,67,116,99" />
+                        <Label x:Name="lblLastChance" Content="Last Chance :" Grid.Row="1" Margin="10,67,116,105" />
                         <CheckBox x:Name="chkYesLC" Content="Yes" RenderTransformOrigin="0.333,2.444" Checked="chkYesLC_Checked" Grid.Row="1" Margin="120,69,54,105"/>
                         <CheckBox x:Name="chkNoLC" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoLC_Checked" Grid.Row="1" Margin="170,69,10,105"/>
                         <Label x:Name="lblProbi" Content="Probationary :" Grid.Row="1" Margin="10,97,116,77" />
                         <CheckBox x:Name="chkYesProb" Content="Yes" RenderTransformOrigin="0.333,2.444" Checked="chkYesProb_Checked" Grid.Row="1" Margin="120,97,54,77"/>
                         <CheckBox x:Name="chkNoProb" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoProb_Checked" Grid.Row="1" Margin="170,97,10,77"/>
-                        
+
                         <ListView x:Name="lvViolations" Height="182" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Margin="31,10,31,0">
                             <ListView.View>
                                 <GridView>
@@ -119,10 +119,31 @@
         </materialDesign:Card>
 
 
-        <Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="18,564,0,0" VerticalAlignment="Top" Width="75" Click="btnAdd_OnClick"/>
-        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="124,564,0,0" VerticalAlignment="Top" Width="75" Click="btnSave_OnClick"/>
-        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="238,564,0,0" VerticalAlignment="Top" Width="75" Click="btnEdit_OnClick"/>
-        <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="345,564,0,0" VerticalAlignment="Top" Width="75" Click="btnDelete_OnClick"/>
+        <Button x:Name="btnAdd" HorizontalAlignment="Left" Margin="10,0,0,12" Width="115" Height="45" Click="btnAdd_OnClick" VerticalAlignment="Bottom">
+            <WrapPanel>
+                <materialDesign:PackIcon  Kind="AccountPlus" Margin="3,2,3,3"/>
+                <TextBlock Height="16" VerticalAlignment="Center">ADD</TextBlock>
+            </WrapPanel>
+        </Button>
+        <Button x:Name="btnSave" HorizontalAlignment="Left" Margin="148,0,0,12" Width="116" Height="45" Click="btnSave_OnClick" VerticalAlignment="Bottom">
+            <WrapPanel>
+                <materialDesign:PackIcon  Kind="AccountCheck" Margin="3,2,3,3"/>
+                <TextBlock Height="16" VerticalAlignment="Center">SAVE</TextBlock>
+            </WrapPanel>
+        </Button>
+        <Button x:Name="btnEdit" HorizontalAlignment="Left" Margin="291,0,0,12" Width="115"  Height="45" Click="btnEdit_OnClick" VerticalAlignment="Bottom">
+            <WrapPanel>
+                <materialDesign:PackIcon  Kind="AccountEdit" Margin="3,2,3,3"/>
+                <TextBlock Height="16" VerticalAlignment="Center">EDIT</TextBlock>
+            </WrapPanel>
+        </Button>
+        <Button x:Name="btnDelete" HorizontalAlignment="Left" Margin="431,0,0,12" Width="115" Height="45" Click="btnDelete_OnClick" VerticalAlignment="Bottom">
+            <WrapPanel>
+                <materialDesign:PackIcon  Kind="AccountRemove" Margin="3,2,3,3"/>
+                <TextBlock Height="16" VerticalAlignment="Center">DELETE</TextBlock>
+            </WrapPanel>
+        </Button>
+
 
 
     </Grid>

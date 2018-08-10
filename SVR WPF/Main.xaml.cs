@@ -18,25 +18,26 @@ namespace SVR_WPF
         public string user;
         public Main(int userLevel, string user)
         {
+            this.userLevel = userLevel;
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            this.userLevel = userLevel;
             lblUser.Content = user;
             checkAccountLevel();
+
         }
         private void tabAccounts_OnClick(object sender, MouseButtonEventArgs e)
         {
-            Frame.Content = new Accounts();
+            Frame.Navigate(new Accounts());
         }
 
         private void tabSearch_OnClick(object sender, MouseButtonEventArgs e)
         {
-            Frame.Content = new SearchStudent();
+            Frame.Navigate(new SearchStudent());
         }
 
         private void tabRecords_OnClick(object sender, MouseButtonEventArgs e)
         {
-            Frame.Content = new Records();
+            Frame.Navigate(new Records(userLevel));
         }
 
         private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)

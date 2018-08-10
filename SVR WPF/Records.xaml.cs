@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NLog;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
@@ -29,7 +20,7 @@ namespace SVR_WPF
         int value = 0;
         int tempStudNo = 0;
         int i = 1;
-        public Boolean permission;
+        public int userLevel;
         string[] violations = new string[2];
         string violationName;
         string violationDesc;
@@ -37,14 +28,21 @@ namespace SVR_WPF
         int countInsti, countDepart, countAcademic, countProbi, countLastChance;
         List<String> violationsHolder = new List<String>();
         SqlCeConnection conn = DBUtils.GetDBConnection();
-        public Records()
+
+        public Records(int userLevel)
         {
             InitializeComponent();
             txtDate.Text = DateTime.Today.ToString("d");
             updateSY();
             disableFields();
+            this.userLevel = userLevel;
+            checkAccountLevel();
         }
 
+        public Records()
+        {
+            //for some reason it throws an xaml error when removing this constructor, fix b4 defense thnx
+        }
 
         private void chkNoLC_Checked(object sender, RoutedEventArgs e)
         {
@@ -87,6 +85,8 @@ namespace SVR_WPF
                 lblViolationType.Visibility = Visibility.Visible;
                 cmbViolationType.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
+                txtRemarks.IsReadOnly = false;
+
                 chkYesLC.IsEnabled = true;
                 chkNoLC.IsEnabled = true;
 
@@ -103,6 +103,8 @@ namespace SVR_WPF
                 lblViolationType.Visibility = Visibility.Visible;
                 cmbViolationType.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
+                txtRemarks.IsReadOnly = false;
+
 
                 chkYesProb.IsEnabled = false;
                 chkNoProb.IsEnabled = false;
@@ -118,6 +120,7 @@ namespace SVR_WPF
                 lblViolationType.Visibility = Visibility.Visible;
                 cmbViolationType.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
+                txtRemarks.IsReadOnly = false;
 
 
                 chkYesLC.IsEnabled = true;
@@ -887,10 +890,8 @@ namespace SVR_WPF
             txtFName.Text = "";
             txtMName.Text = "";
             txtLName.Text = "";
-            /*
             txtSpecify.Text = "";
-            txtViolateDesc.Text = "";
-            */
+            txtViolationDesc.Text = "";
             txtRemarks.Text = "";
         }
         private void emptyValues()
@@ -932,7 +933,7 @@ namespace SVR_WPF
             txtLName.IsReadOnly = false;
             txtFName.IsReadOnly = false;
             txtMName.IsReadOnly = false;
-            txtRemarks.IsEnabled = false;
+            txtRemarks.IsReadOnly = false;
 
             cmbResidence.IsEnabled = true;
             cmbPeriod.IsEnabled = true;
@@ -1014,16 +1015,20 @@ namespace SVR_WPF
                 b++;
             }
         }
-        /*
+
+
         private void checkAccountLevel()
         {
-            ((Control)this.tabSearch).Enabled = permission;
-            ((Control)this.tabUsers).Enabled = permission;
-            btnEditProb.Enabled = permission;
-            btnDeleteRecord.Enabled = permission;
-            btnGenGenReport.Enabled = permission;
-            btnSpeGenReport.Enabled = permission;
+            if(userLevel == 1)
+            {
+                btnEdit.IsEnabled = true;
+                btnDelete.IsEnabled = true;
+            }
+            else if(userLevel == 2)
+            {
+                btnEdit.IsEnabled = false;
+                btnDelete.IsEnabled = false;
+            }
         }
-        */
     }
 }
