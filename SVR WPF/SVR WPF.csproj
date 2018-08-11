@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>svr_logo_dlI_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -170,6 +173,7 @@
     </Compile>
     <Resource Include="images\SVR Logo.png" />
     <Resource Include="images\Main Header.png" />
+    <Resource Include="svr_logo_dlI_icon.ico" />
     <Content Include="x64\sqlceca40.dll" />
     <Content Include="x64\sqlcecompact40.dll" />
     <Content Include="x64\sqlceer40EN.dll" />

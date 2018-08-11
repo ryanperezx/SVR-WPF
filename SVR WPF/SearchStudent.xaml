@@ -21,6 +21,11 @@
 
     <Grid>
         <Grid>
+            <TextBlock Style="{StaticResource MaterialDesignDisplay4TextBlock}" Margin="0,609,0,0">
+            <Hyperlink IsEnabled="False">
+            Search Student 
+            </Hyperlink>
+            </TextBlock>
             <Label Content="General" Margin="493,42,451,525" FontSize="24" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Width="92" />
             <Label Content="Residence Status :" Margin="347,156,561,423" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
             <Label Content="Period :" Margin="415,192,561,387" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>

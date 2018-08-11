@@ -27,7 +27,7 @@
         <TextBox x:Name="txtUser" materialDesign:HintAssist.Hint="Username" Height="31" Margin="133,136,132,0" VerticalAlignment="Top" Cursor="Hand" MaxLength="15"/>
         <materialDesign:PackIcon Kind="Lock" VerticalAlignment="Top" Margin="112,185,0,0" RenderTransformOrigin="0.562,0.062"/>
         <PasswordBox x:Name="txtPassword" materialDesign:HintAssist.Hint="Password" Margin="133,172,132,0" VerticalAlignment="Top" Height="32" Cursor="Hand"/>
-        <Button x:Name="btnLogin" Content="Login" Margin="133,218,133,0" VerticalAlignment="Top" Height="45" Background="#FF1187E4" Click="btnClick"/>
+        <Button x:Name="btnLogin" Content="LOGIN" Margin="133,218,133,0" VerticalAlignment="Top" Height="45" Background="#FF1187E4" Click="btnClick"/>
         <Label x:Name="lblForgot" Content="Forgot your Password?" Margin="154,268,154,0" Cursor="Hand" MouseLeftButtonUp="lblForgot_OnClick" Height="31" VerticalAlignment="Top"/>
     </Grid>
 

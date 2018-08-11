@@ -47,53 +47,65 @@
 
     <Grid>
         <!--Triple dot navigation-->
-        <Grid Height="75" VerticalAlignment="Top" >
-            <Grid.Background>
+        <materialDesign:Card
+            materialDesign:ShadowAssist.ShadowDepth="Depth2"
+            materialDesign:ShadowAssist.ShadowEdges="Bottom" VerticalAlignment="Top" Height="75">
+            <Grid Height="75" VerticalAlignment="Top" >
+                <Grid.Background>
                 <ImageBrush ImageSource="images/Main Header.png"/>
             </Grid.Background>
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Label x:Name="lblUser" Content="User" VerticalAlignment="Center" FontSize="16" Foreground="White"/>
-                <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
-                    <StackPanel Width="150">
-                        <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="ButtonPopUpLogout_Click"/>
-                        <Button x:Name="ButtonPopUpExit" Content="Exit" Click="ButtonPopUpExit_Click"/>
-                    </StackPanel>
-                </materialDesign:PopupBox>
-            </StackPanel>
-        </Grid>
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label x:Name="lblUser" Content="User" VerticalAlignment="Center" FontSize="16" Foreground="White"/>
+                    <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
+                        <StackPanel Width="150">
+                            <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="ButtonPopUpLogout_Click"/>
+                            <Button x:Name="ButtonPopUpExit" Content="Exit" Click="ButtonPopUpExit_Click"/>
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+
 
         <!--Triple line navigation-->
-        <Grid x:Name="GridMenu"  Margin="0,0,884,0" Width="50" HorizontalAlignment="Left" Background="White">
-            <StackPanel Panel.ZIndex="1">
 
-                <Grid  Height="150" Background="#FF1565C0">
-                    <ToggleButton x:Name="ButtonMenu" Width="30" Height="30" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Margin="12,22,12,102" />
-                </Grid>
+            <Grid x:Name="GridMenu" Margin="0,0,884,0" Width="50" HorizontalAlignment="Left" Background="White">
+            <materialDesign:Card
+            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+            materialDesign:ShadowAssist.ShadowEdges="Right" VerticalAlignment="Stretch">
+                <StackPanel Panel.ZIndex="1">
 
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF363E93">
-                    <ListViewItem x:Name="tabRecords"  Height="60" PreviewMouseLeftButtonUp="tabRecords_OnClick" Visibility="Visible">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="NotePlus" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
-                            <TextBlock Text="Record" VerticalAlignment="Center" Margin="20,10"/>
-                        </StackPanel>
-                    </ListViewItem>
+                    <Grid  Height="150" Background="#FF1565C0">
+                        <ToggleButton x:Name="ButtonMenu" Width="30" Height="30" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Margin="12,22,12,102" />
+                    </Grid>
 
-                    <ListViewItem x:Name="tabSearchAccount" Height="60" PreviewMouseLeftButtonUp="tabSearch_OnClick" Visibility="Visible">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="AccountSearch" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
-                            <TextBlock Text="Search Student" VerticalAlignment="Center" Margin="20,10"/>
-                        </StackPanel>
-                    </ListViewItem>
+                    <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF363E93">
+                        <ListViewItem x:Name="tabRecords"  Height="60" PreviewMouseLeftButtonUp="tabRecords_OnClick" Visibility="Visible">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="NotePlus" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Record" VerticalAlignment="Center" Margin="20,10"/>
+                            </StackPanel>
+                        </ListViewItem>
 
-                    <ListViewItem x:Name="tabAccount" Height="60" PreviewMouseLeftButtonUp="tabAccounts_OnClick" Visibility="Visible">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Account" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
-                            <TextBlock Text="Accounts" VerticalAlignment="Center" Margin="20,10"/>
-                        </StackPanel>
-                    </ListViewItem>
+                        <ListViewItem x:Name="tabSearchAccount" Height="60" PreviewMouseLeftButtonUp="tabSearch_OnClick" Visibility="Visible">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountSearch" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Search Student" VerticalAlignment="Center" Margin="20,10"/>
+                            </StackPanel>
+                        </ListViewItem>
 
-                </ListView>
-            </StackPanel>
+                        <ListViewItem x:Name="tabAccount" Height="60" PreviewMouseLeftButtonUp="tabAccounts_OnClick" Visibility="Visible">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Account" Width="25" Height="25" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Accounts" VerticalAlignment="Center" Margin="20,10"/>
+                            </StackPanel>
+                        </ListViewItem>
+
+                    </ListView>
+                </StackPanel>
+            </materialDesign:Card>
+
         </Grid>
 
         <!--Frame-->
