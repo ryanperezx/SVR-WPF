@@ -18,69 +18,70 @@
       TextOptions.TextRenderingMode="Auto"
       FontFamily="{DynamicResource MaterialDesignFont}" MinWidth="1036" MinHeight="605">
 
-
-    <Grid>
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft}">
         <Grid>
-            <TextBlock Style="{StaticResource MaterialDesignDisplay4TextBlock}" Margin="0,609,0,0">
+            <Grid>
+                <TextBlock Style="{StaticResource MaterialDesignDisplay4TextBlock}" Margin="10,0,0,10" HorizontalAlignment="Left" Width="745" Height="134" VerticalAlignment="Bottom">
             <Hyperlink IsEnabled="False">
             Search Student 
             </Hyperlink>
-            </TextBlock>
-            <Label Content="General" Margin="493,42,451,525" FontSize="24" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Width="92" />
-            <Label Content="Residence Status :" Margin="347,156,561,423" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
-            <Label Content="Period :" Margin="415,192,561,387" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
-            <Label Content="School Year :" Margin="357,232,585,347" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
-            <Label Content="to" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="561,232,451,347" FontSize="15"/>
-            <Label Content="Violation Name :" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="561,121,370,460" FontSize="15"/>
-            <Label Content="Violation Type :" Margin="293,119,632,460" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Width="111"/>
+                </TextBlock>
+                <Label Content="General" Margin="493,42,451,525" FontSize="24" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" Width="92" />
+                <Label Content="Residence Status :" Margin="347,156,561,423" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <Label Content="Period :" Margin="415,192,561,387" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <Label Content="School Year :" Margin="357,232,585,347" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15"/>
+                <Label Content="to" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="561,232,451,347" FontSize="15"/>
+                <Label Content="Violation Name :" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="561,121,370,460" FontSize="15"/>
+                <Label Content="Violation Type :" Margin="293,119,632,460" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Width="111"/>
 
-            <ComboBox x:Name="cmbViolate" SelectedValuePath="Content" Margin="409,121,501,458" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
-                <ComboBoxItem Content="ALL"/>
-                <ComboBoxItem Content="Departmental"/>
-                <ComboBoxItem Content="Institutional"/>
-                <ComboBoxItem Content="Academic"/>
-            </ComboBox>
-            <TextBox x:Name="txtViolate" Text="{Binding ElementName=cmbViolate, Path=Text}" Visibility="Collapsed" TextChanged="cmbViolate_TextChanged"/>
+                <ComboBox x:Name="cmbViolate" SelectedValuePath="Content" Margin="409,121,501,458" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
+                    <ComboBoxItem Content="ALL"/>
+                    <ComboBoxItem Content="Departmental"/>
+                    <ComboBoxItem Content="Institutional"/>
+                    <ComboBoxItem Content="Academic"/>
+                </ComboBox>
+                <TextBox x:Name="txtViolate" Text="{Binding ElementName=cmbViolate, Path=Text}" Visibility="Collapsed" TextChanged="cmbViolate_TextChanged"/>
 
-            <ComboBox x:Name="cmbResidence" SelectedValuePath="Content" Margin="480,156,430,423" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
-                <ComboBoxItem Content="ALL"/>
-                <ComboBoxItem Content="Computer Science"/>
-                <ComboBoxItem Content="Transferee"/>
-                <ComboBoxItem Content="Shifter"/>
-            </ComboBox>
-            <ComboBox x:Name="cmbPeriod" SelectedValuePath="Content" Margin="480,192,430,387" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
-                <ComboBoxItem Content="ALL"/>
-                <ComboBoxItem Content="1st"/>
-                <ComboBoxItem Content="2nd"/>
-                <ComboBoxItem Content="3rd"/>
-            </ComboBox>
+                <ComboBox x:Name="cmbResidence" SelectedValuePath="Content" Margin="480,156,430,423" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
+                    <ComboBoxItem Content="ALL"/>
+                    <ComboBoxItem Content="Computer Science"/>
+                    <ComboBoxItem Content="Transferee"/>
+                    <ComboBoxItem Content="Shifter"/>
+                </ComboBox>
+                <ComboBox x:Name="cmbPeriod" SelectedValuePath="Content" Margin="480,192,430,387" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center" Width="126">
+                    <ComboBoxItem Content="ALL"/>
+                    <ComboBoxItem Content="1st"/>
+                    <ComboBoxItem Content="2nd"/>
+                    <ComboBoxItem Content="3rd"/>
+                </ComboBox>
 
-            <ComboBox x:Name="cmbViolationName" Margin="686,122,245,459" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"/>
-            <TextBox x:Name="txtViolationName" Text="{Binding ElementName=cmbViolationName, Path=Text}" Visibility="Collapsed"/>
+                <ComboBox x:Name="cmbViolationName" Margin="686,122,245,459" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"/>
+                <TextBox x:Name="txtViolationName" Text="{Binding ElementName=cmbViolationName, Path=Text}" Visibility="Collapsed"/>
 
-            <ComboBox x:Name="cmbSYFrom" Margin="456,232,480,347" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"/>
-            <ComboBox x:Name="cmbSYTo" Margin="590,232,350,347" VerticalAlignment="Center" HorizontalAlignment="Center" Width="96"/>
-            <TextBox x:Name="txtSYFrom" Text="{Binding ElementName=cmbSYFrom, Path=Text}" Visibility="Collapsed" />
-            <TextBox x:Name="txtSYTo" Text="{Binding ElementName=cmbSYTo, Path=Text}" Visibility="Collapsed" />
+                <ComboBox x:Name="cmbSYFrom" Margin="456,232,480,347" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"/>
+                <ComboBox x:Name="cmbSYTo" Margin="590,232,350,347" VerticalAlignment="Center" HorizontalAlignment="Center" Width="96"/>
+                <TextBox x:Name="txtSYFrom" Text="{Binding ElementName=cmbSYFrom, Path=Text}" Visibility="Collapsed" />
+                <TextBox x:Name="txtSYTo" Text="{Binding ElementName=cmbSYTo, Path=Text}" Visibility="Collapsed" />
 
-            <Button x:Name="btnGenGenReport" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btnGenGenReport_Click" Height="Auto" Margin="456,289,401,289">
-                <WrapPanel>
-                    <materialDesign:PackIcon  Kind="AccountSearch" Margin="3,2,3,3"/>
-                    <TextBlock Width="125" VerticalAlignment="Center">GENERATE REPORT</TextBlock>
-                </WrapPanel>
-            </Button>
+                <Button x:Name="btnGenGenReport" VerticalAlignment="Center" HorizontalAlignment="Center" Click="btnGenGenReport_Click" Height="Auto" Margin="456,289,401,289">
+                    <WrapPanel>
+                        <materialDesign:PackIcon  Kind="AccountSearch" Margin="3,2,3,3"/>
+                        <TextBlock Width="125" VerticalAlignment="Center">GENERATE REPORT</TextBlock>
+                    </WrapPanel>
+                </Button>
+            </Grid>
+            <Grid>
+                <Label Content="Specific" Margin="494,354,452,215" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" />
+                <Label Content="Student No. :" Margin="340,424,600,155" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Width="96"/>
+
+                <TextBox x:Name="txtStudNo" Margin="456,424,402,158" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Width="178" MaxLength="9"/>
+                <Button x:Name="btnSpeGenReport" Click="btnSpeGenReport_Click" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="455,468,401,92" Height="Auto">
+                    <WrapPanel>
+                        <materialDesign:PackIcon  Kind="AccountSearch" Margin="3,2,3,3"/>
+                        <TextBlock Width="125" VerticalAlignment="Center">GENERATE REPORT</TextBlock>
+                    </WrapPanel>
+                </Button>
+            </Grid>
         </Grid>
-        <Grid>
-            <Label Content="Specific" Margin="494,354,452,215" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" />
-            <Label Content="Student No. :" Margin="340,424,600,155" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Width="96"/>
-
-            <TextBox x:Name="txtStudNo" Margin="456,424,402,158" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Width="178" MaxLength="9"/>
-            <Button x:Name="btnSpeGenReport" Click="btnSpeGenReport_Click" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="455,468,401,92" Height="Auto">
-                <WrapPanel>
-                    <materialDesign:PackIcon  Kind="AccountSearch" Margin="3,2,3,3"/>
-                    <TextBlock Width="125" VerticalAlignment="Center">GENERATE REPORT</TextBlock>
-                </WrapPanel>
-            </Button>
-        </Grid>
-    </Grid>
+    </materialDesign:TransitioningContent>
 </Page>
