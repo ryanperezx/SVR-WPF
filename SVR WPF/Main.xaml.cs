@@ -22,6 +22,7 @@ namespace SVR_WPF
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             lblUser.Content = user;
+            Frame.Navigate(new Records(userLevel));
             checkAccountLevel();
 
         }

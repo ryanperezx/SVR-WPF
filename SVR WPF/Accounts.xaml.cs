@@ -19,6 +19,8 @@ namespace SVR_WPF
         public Accounts()
         {
             InitializeComponent();
+            time.Content = DateTime.Now.ToString("G");
+            startTimer();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -222,6 +224,19 @@ namespace SVR_WPF
             txtLastName.Text = "";
             txtMiddleName.Text = "";
             txtAnswer.Text = "";
+        }
+
+        private void startTimer()
+        {
+            System.Windows.Forms.Timer tmr = null;
+            tmr = new System.Windows.Forms.Timer();
+            tmr.Interval = 1000;
+            tmr.Tick += new EventHandler(tmr_Tick);
+            tmr.Enabled = true;
+        }
+        private void tmr_Tick(object sender, EventArgs e)
+        {
+            time.Content = DateTime.Now.ToString("G");
         }
     }
 }

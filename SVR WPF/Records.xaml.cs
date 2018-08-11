@@ -36,7 +36,9 @@ namespace SVR_WPF
             updateSY();
             disableFields();
             this.userLevel = userLevel;
+            time.Content = DateTime.Now.ToString("G");
             checkAccountLevel();
+            startTimer();
         }
 
         public Records()
@@ -1015,8 +1017,6 @@ namespace SVR_WPF
                 b++;
             }
         }
-
-
         private void checkAccountLevel()
         {
             if(userLevel == 1)
@@ -1029,6 +1029,18 @@ namespace SVR_WPF
                 btnEdit.IsEnabled = false;
                 btnDelete.IsEnabled = false;
             }
+        }
+        private void startTimer()
+        {
+            System.Windows.Forms.Timer tmr = null;
+            tmr = new System.Windows.Forms.Timer();
+            tmr.Interval = 1000;
+            tmr.Tick += new EventHandler(tmr_Tick);
+            tmr.Enabled = true;
+        }
+        private void tmr_Tick(object sender, EventArgs e)
+        {
+            time.Content = DateTime.Now.ToString("G");
         }
     }
 }

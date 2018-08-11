@@ -50,9 +50,9 @@
         <materialDesign:Card
             materialDesign:ShadowAssist.ShadowDepth="Depth2"
             materialDesign:ShadowAssist.ShadowEdges="Bottom" VerticalAlignment="Top" Height="75">
-            <Grid Height="75" VerticalAlignment="Top" >
+            <Grid Height="75">
                 <Grid.Background>
-                    <ImageBrush ImageSource="images/Main Header.png"/>
+                    <ImageBrush ImageSource="images/Main Header.png" Stretch="UniformToFill"/>
                 </Grid.Background>
 
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -109,6 +109,6 @@
         </Grid>
 
         <!--Frame-->
-        <Frame x:Name="Frame" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Source="Records.xaml" Margin="50,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"/>
+        <Frame x:Name="Frame" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="50,75,0,0" NavigationUIVisibility="Hidden" Panel.ZIndex="-1"/>
     </Grid>
 </Window>

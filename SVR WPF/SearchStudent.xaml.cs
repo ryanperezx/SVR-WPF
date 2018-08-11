@@ -21,6 +21,8 @@ namespace SVR_WPF
         {
             InitializeComponent();
             updateSY();
+            time.Content = DateTime.Now.ToString("G");
+            startTimer();
         }
 
         private void updateSY()
@@ -98,7 +100,18 @@ namespace SVR_WPF
             }
             conn.Close();
         }
-
+        private void startTimer()
+        {
+            System.Windows.Forms.Timer tmr = null;
+            tmr = new System.Windows.Forms.Timer();
+            tmr.Interval = 1000;
+            tmr.Tick += new EventHandler(tmr_Tick);
+            tmr.Enabled = true;
+        }
+        private void tmr_Tick(object sender, EventArgs e)
+        {
+            time.Content = DateTime.Now.ToString("G");
+        }
 
         private void cmbViolate_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -127,7 +140,6 @@ namespace SVR_WPF
                 }
             }
         }
-
         private void btnSpeGenReport_Click(object sender, RoutedEventArgs e)
         {
             conn.Open();
