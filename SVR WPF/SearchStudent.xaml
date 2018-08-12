@@ -74,7 +74,7 @@
                 <Label Content="Specific" Margin="494,354,452,215" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" />
                 <Label Content="Student No. :" Margin="340,424,600,155" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Width="96"/>
 
-                <TextBox x:Name="txtStudNo" Margin="456,424,402,158" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Width="178" MaxLength="9"/>
+                <TextBox x:Name="txtStudNo" Margin="456,424,402,158" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Width="178" MaxLength="9" PreviewTextInput="txtStudNo_PreviewTextInput"/>
                 <Button x:Name="btnSpeGenReport" Click="btnSpeGenReport_Click" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="455,468,401,92" Height="Auto">
                     <WrapPanel>
                         <materialDesign:PackIcon  Kind="AccountSearch" Margin="3,2,3,3"/>

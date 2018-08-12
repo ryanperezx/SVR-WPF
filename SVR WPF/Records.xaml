@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:SVR_WPF"
       mc:Ignorable="d"
       Title="Records"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -35,7 +36,7 @@
             <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}" Margin="70,50,70,0" Panel.ZIndex="-1">
                 <StackPanel>
                     <Expander Header="Student Information" HorizontalAlignment="Stretch">
-                        <Grid Height="60" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="1016" Margin="0 0 0 10">
+                        <Grid Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="1016" Margin="0 0 0 10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
@@ -45,24 +46,55 @@
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
-                            <Label Content="Student No :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="87" Margin="0,0,247,28" Grid.RowSpan="2" />
-                            <TextBox x:Name="txtStudNo" TextWrapping="Wrap" KeyDown="txtStudNo_KeyDown" Width="154" Margin="97,0,88,0" MaxLength="9"/>
-
-                            <Label Content="Residence Status :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="123" RenderTransformOrigin="2.779,-0.308" Grid.Column="1" Margin="0,0,215,28" Grid.RowSpan="2" />
-                            <ComboBox x:Name="cmbResidence" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="154" RenderTransformOrigin="1.461,-3.714" Grid.Column="1" Margin="0,0,56,0">
-                                <ComboBoxItem Content="Computer Science"/>
-                                <ComboBoxItem Content="Transferee"/>
-                                <ComboBoxItem Content="Shifter"/>
+                            <Label Content="Student No :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="87" Margin="0,0,247,8" />
+                            <TextBox x:Name="txtStudNo" TextWrapping="Wrap" KeyDown="txtStudNo_KeyDown" Width="154" Margin="97,0,88,8" MaxLength="9" PreviewTextInput="txtStudNo_PreviewTextInput" Height="31" VerticalAlignment="Bottom">
+                                <TextBox.Text>
+                                    <Binding Path="StudNo" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Content="Residence Status :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="123" RenderTransformOrigin="2.779,-0.308" Grid.Column="1" Margin="0,0,215,8" />
+                            <ComboBox x:Name="cmbResidence" ItemsSource="{Binding List}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="154" RenderTransformOrigin="1.461,-3.714" Grid.Column="1" Margin="0,0,56,10">
+                                <ComboBox.Text>
+                                    <Binding Path="ResidenceStatus" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </ComboBox.Text>
+                                <ComboBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ComboBox.ItemsPanel>
                             </ComboBox>
 
-                            <Label Content="Last Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="87" Grid.Row="1" Margin="0,0,247,-4" />
-                            <TextBox x:Name="txtLName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Margin="97,0,0,0"/>
+                            <Label Content="Last Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="87" Grid.Row="1" Margin="0,0,247,8" />
+                            <TextBox x:Name="txtLName" HorizontalAlignment="Left" Height="28" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Margin="97,0,0,12">
+                                <TextBox.Text>
+                                    <Binding Path="LastName" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            <Label Content="First Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="84" Grid.Column="1" Grid.Row="1" Margin="0,0,215,8"/>
+                            <TextBox x:Name="txtFName" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Column="1" Grid.Row="1" Margin="128,0,0,10">
+                                <TextBox.Text>
+                                    <Binding Path="FirstName" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <local:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
 
-                            <Label Content="First Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="84" Grid.Column="1" Grid.Row="1" Margin="0,0,215,1"/>
-                            <TextBox x:Name="txtFName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Column="1" Grid.Row="1" Margin="128,0,0,0"/>
-
-                            <Label Content="Middle Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="103" Grid.Row="1" Grid.Column="2" Margin="0,0,231,1"/>
-                            <TextBox x:Name="txtMName" HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Grid.Column="2" Margin="0,0,72,0"/>
+                            <Label Content="Middle Name :" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="103" Grid.Row="1" Grid.Column="2" Margin="0,0,231,8"/>
+                            <TextBox x:Name="txtMName" HorizontalAlignment="Right" Height="30" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="154" Grid.Row="1" Grid.Column="2" Margin="0,0,72,10"/>
                         </Grid>
                     </Expander>
 
@@ -109,10 +141,10 @@
                             <TextBox x:Name="txtRemarks" Grid.Row="1" Margin="85,10,10,158" RenderTransformOrigin="0.33,0.739" IsReadOnly="True"/>
                             <Label x:Name="lblLastChance" Content="Last Chance :" Grid.Row="1" Margin="10,67,116,105" />
                             <CheckBox x:Name="chkYesLC" Content="Yes" RenderTransformOrigin="0.333,2.444" Checked="chkYesLC_Checked" Grid.Row="1" Margin="120,69,54,105"/>
-                            <CheckBox x:Name="chkNoLC" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoLC_Checked" Grid.Row="1" Margin="170,69,10,105"/>
+                            <CheckBox x:Name="chkNoLC" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoLC_Checked" Grid.Row="1" Margin="170,69,10,105" IsChecked="True"/>
                             <Label x:Name="lblProbi" Content="Probationary :" Grid.Row="1" Margin="10,97,116,77" />
                             <CheckBox x:Name="chkYesProb" Content="Yes" RenderTransformOrigin="0.333,2.444" Checked="chkYesProb_Checked" Grid.Row="1" Margin="120,97,54,77"/>
-                            <CheckBox x:Name="chkNoProb" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoProb_Checked" Grid.Row="1" Margin="170,97,10,77"/>
+                            <CheckBox x:Name="chkNoProb" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoProb_Checked" Grid.Row="1" Margin="170,97,10,77" IsChecked="True"/>
 
                             <ListView x:Name="lvViolations" Height="182" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Margin="31,10,100,0">
                                 <ListView.View>
@@ -153,23 +185,7 @@
                     <materialDesign:PackIcon  Kind="AccountRemove" Margin="3,2,3,3"/>
                     <TextBlock Height="16" VerticalAlignment="Center">DELETE</TextBlock>
                 </WrapPanel>
-            </Button>
-            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}" PlacementMode="BottomAndAlignCentres" Margin="1031,348,0,181" Width="55" Height="55" RenderTransformOrigin="0.491,0.491">
-                <StackPanel>
-                    <Button ToolTip="ADD">
-                        <materialDesign:PackIcon  Kind="AccountPlus" Margin="3,2,3,3"/>
-                    </Button>
-                    <Button ToolTip="SAVE">
-                        <materialDesign:PackIcon  Kind="AccountCheck" Margin="3,2,3,3"/>
-                    </Button>
-                    <Button ToolTip="EDIT">
-                        <materialDesign:PackIcon  Kind="AccountEdit" Margin="3,2,3,3"/>
-                    </Button>
-                    <Button ToolTip="DELETE">
-                        <materialDesign:PackIcon  Kind="AccountRemove" Margin="3,2,3,3"/>
-                    </Button>
-                </StackPanel>
-            </materialDesign:PopupBox>
+            </Button>  
             <Label x:Name="time"  Content="00:00:00" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="160"/>
         </Grid>
     </materialDesign:TransitioningContent>

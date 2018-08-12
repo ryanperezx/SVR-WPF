@@ -19,6 +19,7 @@ namespace SVR_WPF
         public Accounts()
         {
             InitializeComponent();
+            DataContext = new AccountsViewModel();
             time.Content = DateTime.Now.ToString("G");
             startTimer();
         }

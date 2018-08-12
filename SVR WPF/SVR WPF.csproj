@@ -85,13 +85,16 @@
     <Compile Include="Accounts.xaml.cs">
       <DependentUpon>Accounts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AccountsViewModel.cs" />
     <Compile Include="ListViewGenReport.cs" />
     <Compile Include="ListViewSpeReport.cs" />
     <Compile Include="ListViewViolations.cs" />
     <Compile Include="NotEmptyValidationRule.cs" />
+    <Compile Include="NotifyPropertyChangedExtension.cs" />
     <Compile Include="Records.xaml.cs">
       <DependentUpon>Records.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RecordViewModel.cs" />
     <Compile Include="ReportGeneral.xaml.cs">
       <DependentUpon>ReportGeneral.xaml</DependentUpon>
     </Compile>

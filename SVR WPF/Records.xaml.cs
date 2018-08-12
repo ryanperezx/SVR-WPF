@@ -7,6 +7,7 @@ using NLog;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 
 namespace SVR_WPF
@@ -18,16 +19,15 @@ namespace SVR_WPF
     {
         private static Logger Log = LogManager.GetCurrentClassLogger();
         int value = 0;
-        int tempStudNo = 0;
         int i = 1;
         public int userLevel;
+        int tempStudNo = 0;
         string[] violations = new string[2];
         string violationName;
         string violationDesc;
         string violationType;
         int countInsti, countDepart, countAcademic, countProbi, countLastChance;
         List<String> violationsHolder = new List<String>();
-        SqlCeConnection conn = DBUtils.GetDBConnection();
 
         public Records(int userLevel)
         {
@@ -37,6 +37,7 @@ namespace SVR_WPF
             disableFields();
             this.userLevel = userLevel;
             time.Content = DateTime.Now.ToString("G");
+            DataContext = new RecordViewModel();
             checkAccountLevel();
             startTimer();
         }
@@ -169,7 +170,6 @@ namespace SVR_WPF
         }
         private void btnViolateAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            conn.Open();
             if (txtViolate.Text == "")
             {
                 MessageBox.Show("Please fill up the missing fields!");
@@ -183,6 +183,8 @@ namespace SVR_WPF
             }
             else
             {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
+                conn.Open();
                 if (txtViolate.Text == "Departmental")
                 {
                     if (txtViolationType.Text == "Others (Please specify)")
@@ -190,6 +192,7 @@ namespace SVR_WPF
                         if (txtSpecify.Text == "" || txtViolationDesc.Text == "")
                         {
                             MessageBox.Show("Specify field or violation description field is empty!");
+                            conn.Close();
                             return;
                         }
                         else
@@ -213,6 +216,8 @@ namespace SVR_WPF
                                 {
                                     Log = LogManager.GetLogger("*");
                                     Log.Error(ex, "Query Error");
+                                    conn.Close();
+                                    return;
                                 }
                             }
                             violations[1] = txtSpecify.Text;
@@ -233,6 +238,7 @@ namespace SVR_WPF
                         if (txtSpecify.Text == "" || txtViolationDesc.Text == "")
                         {
                             MessageBox.Show("Specify field or violation description field is empty!");
+                            conn.Close();
                             return;
                         }
                         else
@@ -256,6 +262,8 @@ namespace SVR_WPF
                                 {
                                     Log = LogManager.GetLogger("*");
                                     Log.Error(ex, "Query Error");
+                                    conn.Close();
+                                    return;
                                 }
                             }
                             violations[1] = txtSpecify.Text;
@@ -276,6 +284,7 @@ namespace SVR_WPF
                         if (txtSpecify.Text == "" || txtViolationDesc.Text == "")
                         {
                             MessageBox.Show("Specify field or violation description field is empty!");
+                            conn.Close();
                             return;
                         }
                         else
@@ -299,6 +308,7 @@ namespace SVR_WPF
                                 {
                                     Log = LogManager.GetLogger("*");
                                     Log.Error(ex, "Query Error");
+                                    conn.Close();
                                     return;
                                 }
                             }
@@ -324,9 +334,16 @@ namespace SVR_WPF
                 txtViolationDesc.Text = "";
                 cmbViolate.SelectedIndex = -1;
                 i++;
+                conn.Close();
             }
         }
 
+
+        private void txtStudNo_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
         private void txtStudNo_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -340,9 +357,11 @@ namespace SVR_WPF
                 }
                 else
                 {
+                    SqlCeConnection conn = DBUtils.GetDBConnection();
                     conn.Open();
-                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studNo", conn))
                     {
+                        cmd.Parameters.AddWithValue("@studNo", txtStudNo.Text);
                         int studCount;
                         int check;
                         if (!int.TryParse(txtStudNo.Text, out check))
@@ -359,7 +378,7 @@ namespace SVR_WPF
                         if (studCount > 0)
                         {
                             string studentNumber = txtStudNo.Text;
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo", conn))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo;", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@studentNo", studentNumber);
                                 cmd1.Connection = conn;
@@ -407,6 +426,7 @@ namespace SVR_WPF
         }
         private void btnSave_OnClick(object sender, RoutedEventArgs e)
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtStudNo.Text == "" || txtLName.Text == "" || txtFName.Text == "" || cmbResidence.Text == "")
             {
@@ -423,6 +443,7 @@ namespace SVR_WPF
                 {
                     using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
                     {
+                        cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                         int studNo;
                         int check;
                         int studCount;
@@ -458,12 +479,14 @@ namespace SVR_WPF
                             }
                             string date = txtDate.Text;
 
-                            using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo=" + txtStudNo.Text, conn))
+                            using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo = @studentNo;", conn))
                             {
 
                                 command.Parameters.AddWithValue("@counterInsti", countInsti);
                                 command.Parameters.AddWithValue("@counterDept", countDepart);
                                 command.Parameters.AddWithValue("@counterAcad", countAcademic);
+                                command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+
                                 if (chkYesLC.IsChecked ?? true)
                                 {
                                     countLastChance = 1;
@@ -666,7 +689,6 @@ namespace SVR_WPF
                             i = 1;
                         }
                     }
-                    conn.Close();
                 }
             }
             else if (value == 2)
@@ -691,8 +713,9 @@ namespace SVR_WPF
                             string firstName = txtFName.Text;
                             string middleName = txtMName.Text;
                             string residence = cmbResidence.Text;
-                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE StudentInfo SET StudentNo = @StudNo, LastName = @LName, GivenName = @FName, MiddleName = @MName, ResidenceStatus = @residence where studentNo =" + tempStudNo, conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE StudentInfo SET StudentNo = @StudNo, LastName = @LName, GivenName = @FName, MiddleName = @MName, ResidenceStatus = @residence where studentNo = @tempStudNo;", conn))
                             {
+                                cmd.Parameters.AddWithValue("@tempStudNo", tempStudNo);
                                 cmd.Parameters.AddWithValue("@StudNo", studNo);
                                 cmd.Parameters.AddWithValue("@LName", lastName);
                                 cmd.Parameters.AddWithValue("@FName", firstName);
@@ -717,13 +740,14 @@ namespace SVR_WPF
                             emptyTextbox();
                             emptyComboBox();
                             disableFields();
-                            conn.Close();
                             break;
 
                         case MessageBoxResult.No: break;
                     }
                 }
             }
+            conn.Close();
+
         }
         private void btnAdd_OnClick(object sender, RoutedEventArgs e)
         {
@@ -740,9 +764,12 @@ namespace SVR_WPF
             }
             else
             {
+                SqlCeConnection conn = DBUtils.GetDBConnection();
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo;", conn))
                 {
+                    cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+
                     int check;
                     int studCount;
                     if (!int.TryParse(txtStudNo.Text, out check))
@@ -793,8 +820,9 @@ namespace SVR_WPF
                         case MessageBoxResult.Yes:
                             SqlCeConnection conn = DBUtils.GetDBConnection();
                             conn.Open();
-                            using (SqlCeCommand cnt = new SqlCeCommand("Select COUNT(1) from StudentInfoArchive where studentNo =" + txtStudNo.Text, conn))
+                            using (SqlCeCommand cnt = new SqlCeCommand("Select COUNT(1) from StudentInfoArchive where studentNo = @studentNo;", conn))
                             {
+                                cnt.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                 int studCount;
                                 int check;
                                 if (!int.TryParse(txtStudNo.Text, out check))
@@ -810,12 +838,15 @@ namespace SVR_WPF
                                 {
                                     int studNo = Convert.ToInt32(txtStudNo.Text);
                                     MessageBox.Show("Student " + txtStudNo.Text + " has an record in the archive! (Student has been deleted before)");
-                                    SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo=" + txtStudNo.Text + ";", conn);
+                                    SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn);
+                                    command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+
                                     command.ExecuteNonQuery();
                                     using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
                                     {
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=" + txtStudNo.Text, conn);
+                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo= @studentNo;", conn);
+                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         cmd1.ExecuteNonQuery();
                                     }
 
@@ -828,10 +859,12 @@ namespace SVR_WPF
                                 }
                                 else
                                 {
-                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into StudentInfoArchive(studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti) select studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into StudentInfoArchive(studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti) select studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti from StudentInfo where studentNo = @studentNo;", conn))
                                     {
+                                        cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo=" + txtStudNo.Text, conn);
+                                        SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn);
+                                        command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         int count = command.ExecuteNonQuery();
                                         if (count == 1)
                                         {
@@ -849,7 +882,8 @@ namespace SVR_WPF
                                     using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
                                     {
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=" + txtStudNo.Text, conn);
+                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=@studentNo;", conn);
+                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         cmd1.ExecuteNonQuery();
                                     }
 
@@ -861,11 +895,9 @@ namespace SVR_WPF
                                     emptyComboBox();
                                     disableFields();
                                     conn.Close();
-                                    conn.Dispose();
                                 }
                             }
                             conn.Close();
-                            conn.Dispose();
                             break;
 
                         case MessageBoxResult.No:
@@ -948,6 +980,7 @@ namespace SVR_WPF
 
         private void updateViolations()
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtViolate.Text == "Departmental")
             {

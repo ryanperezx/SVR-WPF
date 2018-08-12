@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Data.SqlServerCe;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Text.RegularExpressions;
 
 namespace SVR_WPF
 {
@@ -16,7 +17,6 @@ namespace SVR_WPF
     /// </summary>
     public partial class SearchStudent : Page
     {
-        SqlCeConnection conn = DBUtils.GetDBConnection();
         public SearchStudent()
         {
             InitializeComponent();
@@ -40,6 +40,7 @@ namespace SVR_WPF
         }
         private void updateViolations()
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (txtViolate.Text == "Departmental")
             {
@@ -142,9 +143,11 @@ namespace SVR_WPF
         }
         private void btnSpeGenReport_Click(object sender, RoutedEventArgs e)
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo;", conn))
             {
+                cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                 if (txtStudNo.Text == "")
                 {
                     MessageBox.Show("No user input!");
@@ -174,7 +177,12 @@ namespace SVR_WPF
                 }
             }
             conn.Close();
-            conn.Dispose();
+        }
+
+        private void txtStudNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
         }
     }
 }
