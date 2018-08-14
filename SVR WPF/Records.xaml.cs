@@ -216,6 +216,7 @@ namespace SVR_WPF
                                 {
                                     Log = LogManager.GetLogger("*");
                                     Log.Error(ex, "Query Error");
+                                    countLastChance = 0;
                                     conn.Close();
                                     return;
                                 }
@@ -227,6 +228,12 @@ namespace SVR_WPF
                     {
                         violationName = txtViolationType.Text;
                         violations[1] = txtViolationType.Text;
+                    }
+                    if (chkYesLC.IsChecked ?? true)
+                    {
+                        countLastChance++;
+                        chkYesLC.IsChecked = false;
+                        chkNoLC.IsChecked = true;
                     }
                     cmbViolationType.SelectedIndex = -1;
                     countDepart++;
@@ -308,6 +315,8 @@ namespace SVR_WPF
                                 {
                                     Log = LogManager.GetLogger("*");
                                     Log.Error(ex, "Query Error");
+                                    countLastChance = 0;
+                                    countProbi = 0;
                                     conn.Close();
                                     return;
                                 }
@@ -319,6 +328,20 @@ namespace SVR_WPF
                     {
                         violationName = txtViolationType.Text;
                         violations[1] = txtViolationType.Text;
+                    }
+                    if (chkYesLC.IsChecked ?? true)
+                    {
+                        countLastChance++;
+                        chkYesLC.IsChecked = false;
+                        chkNoLC.IsChecked = true;
+
+                    }
+                    if (chkYesProb.IsChecked ?? true)
+                    {
+                        countProbi++;
+                        chkYesProb.IsChecked = false;
+                        chkNoProb.IsChecked = true;
+
                     }
                     cmbViolationType.SelectedIndex = -1;
                     countAcademic++;
@@ -445,9 +468,8 @@ namespace SVR_WPF
                     {
                         cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                         int studNo;
-                        int check;
                         int studCount;
-                        if (!int.TryParse(txtStudNo.Text, out check))
+                        if (!int.TryParse(txtStudNo.Text, out int check))
                         {
                             MessageBox.Show("Invalid Input!");
                             return;
@@ -486,32 +508,18 @@ namespace SVR_WPF
                                 command.Parameters.AddWithValue("@counterDept", countDepart);
                                 command.Parameters.AddWithValue("@counterAcad", countAcademic);
                                 command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-
-                                if (chkYesLC.IsChecked ?? true)
-                                {
-                                    countLastChance = 1;
-                                }
-                                else if (chkNoLC.IsChecked ?? true)
-                                {
-                                    countLastChance = 0;
-                                }
                                 command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
-                                if (chkYesProb.IsChecked ?? true)
-                                {
-                                    countProbi = 1;
-                                }
-                                else if (chkNoProb.IsChecked ?? true)
-                                {
-                                    countProbi = 0;
-                                }
                                 command.Parameters.AddWithValue("@CounterProbi", countProbi);
-
                                 try
                                 {
                                     command.ExecuteNonQuery();
                                     MessageBox.Show("Added Successfully");
                                     Log = LogManager.GetLogger("addStudent");
                                     Log.Info("Student no: " + studNo + " added to database!");
+                                    MessageBox.Show(countLastChance.ToString());
+                                    MessageBox.Show(countProbi.ToString());
+                                    countLastChance = 0;
+                                    countProbi = 0;
                                 }
                                 catch (SqlException ex)
                                 {
@@ -616,14 +624,6 @@ namespace SVR_WPF
                                 command.Parameters.AddWithValue("@CounterDept", countDepart);
                                 command.Parameters.AddWithValue("@CounterAcad", countAcademic);
                                 command.Parameters.AddWithValue("@CounterProbi", countProbi);
-                                if (chkYesLC.IsChecked ?? true)
-                                {
-                                    countLastChance = 1;
-                                }
-                                else if (chkNoLC.IsChecked ?? true)
-                                {
-                                    countLastChance = 0;
-                                }
                                 command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
                                 try
                                 {
@@ -631,6 +631,8 @@ namespace SVR_WPF
                                     MessageBox.Show("Added Successfully");
                                     Log = LogManager.GetLogger("addStudent");
                                     Log.Info("Student no: " + studNo + " added to database!");
+                                    countLastChance = 0;
+                                    countProbi = 0;
 
                                 }
                                 catch (SqlException ex)

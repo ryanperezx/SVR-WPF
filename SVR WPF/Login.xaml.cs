@@ -2,7 +2,6 @@
 using System.Windows;
 using NLog;
 using System.Data.SqlServerCe;
-using MaterialDesignThemes.Wpf;
 namespace SVR_WPF
 {
 
@@ -10,6 +9,7 @@ namespace SVR_WPF
     public partial class MainWindow : Window
     {
         string user;
+        private static Logger Log = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
             InitializeComponent();
@@ -75,11 +75,9 @@ namespace SVR_WPF
                             dr.Dispose();
                             cmd2.ExecuteNonQuery();
                             MessageBox.Show("Login Successful");
-                            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"Logs\ActivityLogs.txt", true))
-                            {
-                                string time = DateTime.Now.ToString();
-                                file.WriteLine(time + " Account Name: " + lName + ", " + fName + " " + mName + " has logged in.");
-                            }
+                            Log = LogManager.GetLogger("userLogin");
+                            Log.Info(" Account Name: " + lName + ", " + fName + " " + mName + " has logged in.");
+
                         }
 
                         else
