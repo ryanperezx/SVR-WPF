@@ -110,13 +110,13 @@
                                 <RowDefinition Height="173*" />
                                 <RowDefinition Height="202*"/>
                             </Grid.RowDefinitions>
-                            <Label Content="Period :" Width="58" Margin="10,36,0,109" HorizontalAlignment="Left"/>
+                            <Label Content="Semester :" Width="86" Margin="20,76,0,69" HorizontalAlignment="Left"/>
                             <ComboBox x:Name="cmbPeriod" Width="70" Margin="120,80,0,67" Height="26" HorizontalAlignment="Left" IsReadOnly="True">
                                 <ComboBoxItem Content="1st"/>
                                 <ComboBoxItem Content="2nd"/>
                                 <ComboBoxItem Content="3rd"/>
                             </ComboBox>
-                            <Label Content="SY :" Margin="34,80,0,67" HorizontalAlignment="Left" Width="44" RenderTransformOrigin="0.6,0.769"/>
+                            <Label Content="SY :" Margin="34,38,0,109" HorizontalAlignment="Left" Width="44" RenderTransformOrigin="0.6,0.769"/>
                             <ComboBox x:Name="cmbSY" Width="100" Margin="90,36,0,109" HorizontalAlignment="Left" Height="28" IsReadOnly="True">
                             </ComboBox>
 

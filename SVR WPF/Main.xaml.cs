@@ -43,7 +43,7 @@ namespace SVR_WPF
 
         private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)
         {
-            string sMessageBoxText = "Do you want to log out";
+            string sMessageBoxText = "Do you want to log out?";
             string sCaption = "Logout";
             MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
             MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
@@ -71,14 +71,13 @@ namespace SVR_WPF
             }
             else if(userLevel == 2)
             {
-                tabSearchAccount.Visibility = Visibility.Collapsed;
                 tabAccount.Visibility = Visibility.Collapsed;
             }
         }
 
         private void ButtonPopUpExit_Click(object sender, RoutedEventArgs e)
         {
-            string sMessageBoxText = "Do you want to Exit";
+            string sMessageBoxText = "Do you want to exit the application?";
             string sCaption = "Exit";
             MessageBoxButton btnMessageBox = MessageBoxButton.YesNoCancel;
             MessageBoxImage icnMessageBox = MessageBoxImage.Warning;
