@@ -135,15 +135,10 @@ namespace SVR_WPF
             }
             else
             {
-                lblViolationType.Visibility = Visibility.Hidden;
-                txtRemarks.Visibility = Visibility.Hidden;
-                cmbViolationType.Visibility = Visibility.Hidden;
-                lblRemarks.Visibility = Visibility.Hidden;
-                lblSpecify.Visibility = Visibility.Hidden;
-                txtSpecify.Visibility = Visibility.Hidden;
-                lblViolationDesc.Visibility = Visibility.Hidden;
-                txtViolationDesc.Visibility = Visibility.Hidden;
-                btnViolateAdd.Visibility = Visibility.Hidden;
+                chkYesLC.IsEnabled = false;
+                chkNoLC.IsEnabled = false;
+                chkYesProb.IsEnabled = false;
+                chkNoProb.IsEnabled = false;
             }
         }
         private void cmbViolationType_TextChanged(object sender, TextChangedEventArgs e)

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SVR_WPF"
         mc:Ignorable="d"
         
-        Title="Main" Height="710" Width="1090"
+        Title="Main"
        
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -18,7 +18,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Foreground="White" WindowState="Maximized" WindowStyle="None">
+        Foreground="White" WindowState="Maximized" WindowStyle="None" Height="768" Width="1366">
 
     <Window.Resources>
         <Storyboard x:Key="MenuOpen">

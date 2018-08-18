@@ -17,12 +17,15 @@ namespace SVR_WPF
     /// </summary>
     public partial class SearchStudent : Page
     {
+        int i = 1;
+        string lastName, firstName;
         public SearchStudent()
         {
             InitializeComponent();
             updateSY();
             time.Content = DateTime.Now.ToString("G");
             startTimer();
+            DataContext = ListViewSearchStudent.getList();
         }
 
         private void updateSY()
@@ -145,34 +148,47 @@ namespace SVR_WPF
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo;", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT COUNT(1) from StudentInfo WHERE (lastName = @LastName) and (givenName = @firstName)", conn))
             {
-                cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                if (txtStudNo.Text == "")
+                cmd.Parameters.AddWithValue("@lastName", txtLastName.Text);
+                cmd.Parameters.AddWithValue("@firstName", txtFirstName.Text);
+                if (string.IsNullOrEmpty(txtLastName.Text) && string.IsNullOrEmpty(txtFirstName.Text))
                 {
                     MessageBox.Show("No user input!");
+                }
+                else if (string.IsNullOrEmpty(txtLastName.Text))
+                {
+                    MessageBox.Show("Please fill up the missing fields!");
+                    txtLastName.Focus();
+                }
+                else if (string.IsNullOrEmpty(txtFirstName.Text))
+                {
+                    MessageBox.Show("Please fill up the missing fields!");
+                    txtFirstName.Focus();
                 }
                 else
                 {
                     int studCount;
-                    if (!int.TryParse(txtStudNo.Text, out studCount))
+                    studCount = (int)cmd.ExecuteScalar();
+                    if (studCount > 0)
                     {
-                        MessageBox.Show("Invalid Input!");
-                        return;
+                        using (SqlCeCommand cmd1 = new SqlCeCommand("SELECT StudentNo from StudentInfo WHERE (lastName = @LastName) and (givenName = @firstName)", conn))
+                        {
+                            cmd1.Parameters.AddWithValue("@lastName", txtLastName.Text);
+                            cmd1.Parameters.AddWithValue("@firstName", txtFirstName.Text);
+                            using (SqlCeDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            {
+                                reader.Read();
+                                int studNo = Convert.ToInt32(reader.GetValue(0));
+                                ReportSpecific rs = new ReportSpecific(studNo);
+                                rs.studNo = studNo;
+                                rs.ShowDialog();
+                            }
+                        }
                     }
                     else
                     {
-                        studCount = (int)cmd.ExecuteScalar();
-                        if (studCount > 0)
-                        {
-                            ReportSpecific rs = new ReportSpecific(int.Parse(txtStudNo.Text));
-                            rs.studNo = int.Parse(txtStudNo.Text);
-                            rs.ShowDialog();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Student does not exist!");
-                        }
+                        MessageBox.Show("Student does not exist!");
                     }
                 }
             }
@@ -183,6 +199,48 @@ namespace SVR_WPF
         {
             var textBox = sender as TextBox;
             e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
+
+        private void txtName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
+            conn.Open();
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName, GivenName from StudentInfo WHERE (LastName LIKE @lastName ) or (GivenName LIKE @firstName)", conn))
+            {
+                cmd.Parameters.AddWithValue("@lastName", txtLastName.Text + "%");
+                cmd.Parameters.AddWithValue("@firstName", txtFirstName.Text + "%");
+                using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                {
+                    lvListStudent.Items.Clear();
+                    i = 1;
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            int lastNameIndex = reader.GetOrdinal("LastName");
+                            string lastName = Convert.ToString(reader.GetValue(lastNameIndex));
+                            int firstNameIndex = reader.GetOrdinal("GivenName");
+                            string firstName = Convert.ToString(reader.GetValue(firstNameIndex));
+                            lvListStudent.Items.Add(new ListViewSearchStudent
+                            {
+                                i = this.i,
+                                LastName = lastName,
+                                FirstName = firstName
+                            });
+                            i++;
+                        }
+                    }
+                }
+            }
+            conn.Close();
+
+        }
+
+        private void lvListStudent_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ListViewSearchStudent lv = lvListStudent.SelectedItem as ListViewSearchStudent;
+            txtLastName.Text = lv.LastName;
+            txtFirstName.Text = lv.FirstName;
         }
     }
 }
