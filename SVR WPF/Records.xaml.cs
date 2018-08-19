@@ -368,7 +368,6 @@ namespace SVR_WPF
                 if (string.IsNullOrEmpty(txtStudNo.Text))
                 {
                     MessageBox.Show("Please input student number!");
-                    txtStudNo.Text = "";
                     emptyComboBox();
                     emptyTextbox();
                 }
@@ -384,10 +383,9 @@ namespace SVR_WPF
                         if (studCount > 0)
                         {
                             string studentNumber = txtStudNo.Text;
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo;", conn))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@studentNo", studentNumber);
-                                cmd1.Connection = conn;
                                 using (DbDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
                                     if (reader.HasRows)

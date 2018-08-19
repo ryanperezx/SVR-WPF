@@ -1,16 +1,13 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
-using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System;
 using System.Windows;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Data.SqlServerCe;
+using System.Data.Common;
 
 namespace SVR_WPF
 {
@@ -26,9 +23,13 @@ namespace SVR_WPF
 
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
+
             UserCredential credential;
             credential = GetCredentials();
 
+            DateTime dt = new DateTime();
+            DateTime dy = new DateTime();
+            dt = DateTime.Today;
 
             var service = new DriveService(new BaseClientService.Initializer()
             {
@@ -38,8 +39,36 @@ namespace SVR_WPF
 
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-            uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
+            using (SqlCeConnection conn = DBUtils.GetDBConnection())
+            {
+                conn.Open();
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from BackupDate where No = 1", conn))
+                {
+                    using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                    {
+                        reader.Read();
 
+                        int dateIndex = reader.GetOrdinal("backupDate");
+                        DateTime myDate = reader.GetDateTime(dateIndex);
+                        dy = myDate;
+                        MessageBox.Show(dy.ToString());
+                        MessageBox.Show(dt.ToString());
+                        if (dt.Date > dy.Date)
+                        {
+                            MessageBox.Show("Test if check");
+                            uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
+                            /*
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT INTO BackupDate (backupDate) VALUES (@backUpDate)", conn))
+                            {
+                                cmd1.Parameters.AddWithValue("@backUpDate", dt);
+                                cmd1.ExecuteNonQuery();
+                            }
+                            */
+                        }
+                    }
+                }
+                conn.Close();
+            }
 
 
             MainWindow mw = new MainWindow();
@@ -60,8 +89,6 @@ namespace SVR_WPF
             }
 
             var file = request.ResponseBody;
-
-            MessageBox.Show("File ID: " + file.Id);
         }
 
         private static UserCredential GetCredentials()
