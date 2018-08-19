@@ -80,13 +80,13 @@ namespace SVR_WPF
 
         private void cmbViolate_TextChanged(object sender, TextChangedEventArgs e)
         {
-            cmbViolationType.Items.Clear();
+            cmbViolationName.Items.Clear();
             if (txtViolate.Text == "Departmental")
             {
-                lblViolationType.Content = "Departmental: ";
+                lblViolationName.Content = "Departmental: ";
 
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -101,10 +101,10 @@ namespace SVR_WPF
             }
             else if (txtViolate.Text == "Institutional")
             {
-                lblViolationType.Content = "Institutional: ";
+                lblViolationName.Content = "Institutional: ";
 
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -119,9 +119,9 @@ namespace SVR_WPF
             }
             else if (txtViolate.Text == "Academic")
             {
-                lblViolationType.Content = "Academic: ";
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Content = "Academic: ";
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -141,7 +141,7 @@ namespace SVR_WPF
                 chkNoProb.IsEnabled = false;
             }
         }
-        private void cmbViolationType_TextChanged(object sender, TextChangedEventArgs e)
+        private void cmbViolationName_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtViolationType.Text == "Others (Please specify)")
             {
@@ -174,7 +174,7 @@ namespace SVR_WPF
             else if (txtViolationType.Text == "")
             {
                 MessageBox.Show("Please fill up the missing fields!");
-                cmbViolationType.Focus();
+                cmbViolationName.Focus();
             }
             else
             {
@@ -230,7 +230,7 @@ namespace SVR_WPF
                         chkYesLC.IsChecked = false;
                         chkNoLC.IsChecked = true;
                     }
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                     countDepart++;
                 }
                 else if (txtViolate.Text == "Institutional")
@@ -277,7 +277,7 @@ namespace SVR_WPF
                         violations[1] = txtViolationType.Text;
                     }
                     countInsti++;
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                 }
                 else if (cmbViolate.Text == "Academic")
                 {
@@ -336,9 +336,8 @@ namespace SVR_WPF
                         countProbi++;
                         chkYesProb.IsChecked = false;
                         chkNoProb.IsChecked = true;
-
                     }
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                     countAcademic++;
                 }
                 violations[0] = i.ToString();
@@ -366,7 +365,7 @@ namespace SVR_WPF
         {
             if (e.Key == Key.Enter)
             {
-                if (txtStudNo.Text == "")
+                if (string.IsNullOrEmpty(txtStudNo.Text))
                 {
                     MessageBox.Show("Please input student number!");
                     txtStudNo.Text = "";
@@ -381,18 +380,7 @@ namespace SVR_WPF
                     {
                         cmd.Parameters.AddWithValue("@studNo", txtStudNo.Text);
                         int studCount;
-                        int check;
-                        if (!int.TryParse(txtStudNo.Text, out check))
-                        {
-                            MessageBox.Show("Invalid Input!");
-                            emptyComboBox();
-                            emptyTextbox();
-                            return;
-                        }
-                        else
-                        {
-                            studCount = (int)cmd.ExecuteScalar();
-                        }
+                        studCount = (int)cmd.ExecuteScalar();
                         if (studCount > 0)
                         {
                             string studentNumber = txtStudNo.Text;
@@ -463,16 +451,7 @@ namespace SVR_WPF
                     {
                         cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                         int studNo;
-                        int studCount;
-                        if (!int.TryParse(txtStudNo.Text, out int check))
-                        {
-                            MessageBox.Show("Invalid Input!");
-                            return;
-                        }
-                        else
-                        {
-                            studCount = (int)cmd.ExecuteScalar();
-                        }
+                        int studCount = (int)cmd.ExecuteScalar();
                         if (studCount > 0)
                         {
                                 studNo = int.Parse(txtStudNo.Text);
@@ -574,15 +553,7 @@ namespace SVR_WPF
                             {
                                 try
                                 {
-                                    if (!int.TryParse(txtStudNo.Text, out check))
-                                    {
-                                        MessageBox.Show("Invalid Input!");
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        studNo = int.Parse(txtStudNo.Text);
-                                    }
+                                    studNo = int.Parse(txtStudNo.Text);
                                 }
                                 catch (SqlException ex)
                                 {
@@ -763,7 +734,7 @@ namespace SVR_WPF
         }
         private void btnEdit_OnClick(object sender, RoutedEventArgs e)
         {
-            if (txtStudNo.Text == "")
+            if (string.IsNullOrEmpty(txtStudNo.Text))
             {
                 MessageBox.Show("Please input student number in the field before editing!");
             }
@@ -774,18 +745,7 @@ namespace SVR_WPF
                 using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo;", conn))
                 {
                     cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-
-                    int check;
-                    int studCount;
-                    if (!int.TryParse(txtStudNo.Text, out check))
-                    {
-                        MessageBox.Show("Invalid Input!");
-                        return;
-                    }
-                    else
-                    {
-                        studCount = (int)cmd.ExecuteScalar();
-                    }
+                    int studCount = (int)cmd.ExecuteScalar();
                     if (studCount > 0)
                     {
                         value = 2;
@@ -963,8 +923,8 @@ namespace SVR_WPF
             btnViolateAdd.IsEnabled = false;
             btnViolateAdd.Visibility = Visibility.Hidden;
 
-            lblViolationType.Visibility = Visibility.Hidden;
-            cmbViolationType.Visibility = Visibility.Hidden;
+            lblViolationName.Visibility = Visibility.Hidden;
+            cmbViolationName.Visibility = Visibility.Hidden;
         }
         private void enableFields()
         {
@@ -995,12 +955,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }
@@ -1013,12 +973,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }
@@ -1031,12 +991,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }

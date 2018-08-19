@@ -18,7 +18,7 @@ namespace SVR_WPF
     public partial class SearchStudent : Page
     {
         int i = 1;
-        string lastName, firstName;
+
         public SearchStudent()
         {
             InitializeComponent();

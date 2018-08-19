@@ -39,6 +39,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnGenReport" Content="Generate Report" HorizontalAlignment="Center" Width="142" Margin="544,480,544,14" Height="Auto" Click="btnGenReport_Click"/>
+        <Button x:Name="btnGenReport" Content="GENERATE REPORT" Height="50" HorizontalAlignment="Center" Width="156" Margin="537,474,537,10"  Click="btnGenReport_Click"/>
     </Grid>
 </Window>

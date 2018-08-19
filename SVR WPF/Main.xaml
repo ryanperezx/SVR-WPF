@@ -43,6 +43,7 @@
         <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="ButtonMenu">
             <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
         </EventTrigger>
+
     </Window.Triggers>
 
     <Grid>
@@ -77,7 +78,7 @@
                 <StackPanel Panel.ZIndex="1">
 
                     <Grid  Height="150" Background="#FF1565C0">
-                        <ToggleButton x:Name="ButtonMenu" Width="30" Height="30" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Margin="12,22,12,102" />
+                        <ToggleButton x:Name="ButtonMenu"  Width="30" Height="30"  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Margin="12,22,12,102" />
                     </Grid>
 
                     <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF363E93">

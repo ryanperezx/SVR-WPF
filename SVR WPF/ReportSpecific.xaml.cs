@@ -10,7 +10,7 @@ namespace SVR_WPF
     public partial class ReportSpecific : Window
     {
         public int studNo;
-        int institutionalCount, departmentalCount, academicCount;
+        int institutionalCount, departmentalCount, academicCount, probiCount, lastChanceCount;
         string residence, fullName;
         int i = 1;
         int row = 1, column = 8;
@@ -22,7 +22,7 @@ namespace SVR_WPF
             InitializeComponent();
             this.studNo = studNo;
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + GivenName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus FROM StudentInfo WHERE StudentNo = @studentNo", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + GivenName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus, CounterLastChance, CounterProbi FROM StudentInfo WHERE StudentNo = @studentNo", conn))
             {
                 cmd.Parameters.AddWithValue("@studentNo", studNo);
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -34,12 +34,21 @@ namespace SVR_WPF
 
                         int residenceIndex = reader.GetOrdinal("ResidenceStatus");
                         residence = Convert.ToString(reader.GetValue(residenceIndex));
+
+                        int probiCountIndex = reader.GetOrdinal("CounterProbi");
+                        probiCount = Convert.ToInt32(reader.GetValue(probiCountIndex));
+
+                        int lastChanceIndex = reader.GetOrdinal("CounterLastChance");
+                        lastChanceCount = Convert.ToInt32(reader.GetValue(lastChanceIndex));
+
                     }
                 }
             }
             txtStudNo.Text = studNo.ToString();
             txtResidence.Text = residence;
             txtFullName.Text = fullName;
+            txtLC.Text = lastChanceCount.ToString();
+            txtProb.Text = probiCount.ToString();
             updateListView();
         }
 
