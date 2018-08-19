@@ -128,9 +128,9 @@
                             </ComboBox>
                             <TextBox x:Name="txtViolate" Text="{Binding ElementName=cmbViolate, Path=Text}" TextChanged="cmbViolate_TextChanged" Visibility="Collapsed" Grid.Column="1"/>
 
-                            <Label x:Name="lblViolationType" Content="Violation Name :" Grid.Column="1" Margin="21,80,0,67" HorizontalAlignment="Left" Width="122"/>
-                            <ComboBox x:Name="cmbViolationType" Grid.Column="1" RenderTransformOrigin="0.513,3.214" Margin="143,78,0,0" IsReadOnly="True" VerticalAlignment="Top" Height="28" HorizontalAlignment="Left" Width="154"/>
-                            <TextBox x:Name="txtViolationType" Text="{Binding ElementName=cmbViolationType, Path=Text}" Visibility="Collapsed" TextChanged="cmbViolationType_TextChanged" Grid.Column="1"/>
+                            <Label x:Name="lblViolationName" Content="Violation Name :" Grid.Column="1" Margin="21,80,0,67" HorizontalAlignment="Left" Width="122"/>
+                            <ComboBox x:Name="cmbViolationName" Grid.Column="1" RenderTransformOrigin="0.513,3.214" Margin="143,78,0,0" IsReadOnly="True" VerticalAlignment="Top" Height="28" HorizontalAlignment="Left" Width="154"/>
+                            <TextBox x:Name="txtViolationType" Text="{Binding Text, ElementName=cmbViolationName}" Visibility="Collapsed" TextChanged="cmbViolationName_TextChanged" Grid.Column="1"/>
                             <Button x:Name="btnViolateAdd" Content="ADD VIOLATION" VerticalAlignment="Top" Click="btnViolateAdd_OnClick" Grid.Column="1" Margin="148,128,0,0" HorizontalAlignment="Left" Width="149"/>
                             <Label x:Name="lblSpecify" Content="Specify:" Grid.Column="1" Margin="400,33,0,115" HorizontalAlignment="Left" Width="63" Visibility="Hidden"/>
                             <TextBox x:Name="txtSpecify" RenderTransformOrigin="0.774,-0.04" Grid.Column="1" Margin="466,32,0,115" HorizontalAlignment="Left" Width="164" Visibility="Hidden"/>
@@ -185,7 +185,7 @@
                     <materialDesign:PackIcon  Kind="AccountRemove" Margin="3,2,3,3"/>
                     <TextBlock Height="16" VerticalAlignment="Center">DELETE</TextBlock>
                 </WrapPanel>
-            </Button>  
+            </Button>
             <Label x:Name="time"  Content="00:00:00" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="160"/>
         </Grid>
     </materialDesign:TransitioningContent>

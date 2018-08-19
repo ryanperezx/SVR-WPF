@@ -36,8 +36,9 @@ namespace SVR_WPF
                 ApplicationName = ApplicationName,
             });
 
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-            //uploadFile("StudentViolationRecords.sdf", service);
+            uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
 
 
 
@@ -66,8 +67,9 @@ namespace SVR_WPF
         private static UserCredential GetCredentials()
         {
             UserCredential credential;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-            using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream( folder + "\\Student Violation Records\\credentials.json", FileMode.Open, FileAccess.Read))
             {
                 string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
 
@@ -79,7 +81,6 @@ namespace SVR_WPF
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
-                // Console.WriteLine("Credential file saved to: " + credPath);
             }
 
             return credential;

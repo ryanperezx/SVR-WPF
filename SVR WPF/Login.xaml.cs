@@ -76,7 +76,7 @@ namespace SVR_WPF
                             cmd2.ExecuteNonQuery();
                             MessageBox.Show("Login Successful");
                             Log = LogManager.GetLogger("userLogin");
-                            Log.Info(" Account Name: " + lName + ", " + fName + " " + mName + " has logged in.");
+                            Log.Info(" Account Name: " + txtUser.Text + " has logged in.");
 
                         }
 
