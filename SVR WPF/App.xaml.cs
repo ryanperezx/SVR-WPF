@@ -42,7 +42,7 @@ namespace SVR_WPF
             using (SqlCeConnection conn = DBUtils.GetDBConnection())
             {
                 conn.Open();
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT * from BackupDate where No = 1", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT TOP 1 * from BackupDate ORDER BY No DESC", conn))
                 {
                     using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -51,26 +51,22 @@ namespace SVR_WPF
                         int dateIndex = reader.GetOrdinal("backupDate");
                         DateTime myDate = reader.GetDateTime(dateIndex);
                         dy = myDate;
-                        MessageBox.Show(dy.ToString());
-                        MessageBox.Show(dt.ToString());
-                        if (dt.Date > dy.Date)
-                        {
-                            MessageBox.Show("Test if check");
-                            uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
-                            /*
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT INTO BackupDate (backupDate) VALUES (@backUpDate)", conn))
-                            {
-                                cmd1.Parameters.AddWithValue("@backUpDate", dt);
-                                cmd1.ExecuteNonQuery();
-                            }
-                            */
-                        }
+
                     }
                 }
-                conn.Close();
+                if (dt.Date > dy.Date)
+                {
+                    using (SqlCeCommand cmd1 = new SqlCeCommand("INSERT INTO BackupDate (backupDate) VALUES (@backUpDate)", conn))
+                    {
+                        cmd1.Parameters.AddWithValue("@backUpDate", dt);
+                        cmd1.ExecuteNonQuery();
+                    }
+                }
             }
-
-
+            if (dt.Date > dy.Date)
+            {
+                uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
+            }
             MainWindow mw = new MainWindow();
             mw.Show();
         }
