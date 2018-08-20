@@ -488,8 +488,6 @@ namespace SVR_WPF
                                         MessageBox.Show("Added Successfully");
                                         Log = LogManager.GetLogger("addStudent");
                                         Log.Info("Student no: " + studNo + " added to database!");
-                                        MessageBox.Show(countLastChance.ToString());
-                                        MessageBox.Show(countProbi.ToString());
                                     }
                                     catch (SqlException ex)
                                     {
