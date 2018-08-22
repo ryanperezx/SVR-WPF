@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Data.SqlServerCe;
 using System.Data.Common;
-using System.Net.NetworkInformation;
+using System.Net;
 namespace SVR_WPF
 {
     /// <summary>
@@ -22,15 +22,15 @@ namespace SVR_WPF
         static string ApplicationName = "SVR Database";
         bool check;
 
+
+
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
-            CheckConnection(check);
+            CheckConnection();
             if (check == true)
             {
                 UserCredential credential;
                 credential = GetCredentials();
-                MessageBox.Show("1");
-
                 DateTime dt = new DateTime();
                 DateTime dy = new DateTime();
                 dt = DateTime.Today;
@@ -71,10 +71,6 @@ namespace SVR_WPF
                 {
                     uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
                 }
-            }
-            else
-            {
-                MessageBox.Show("2");
             }
             MainWindow mw = new MainWindow();
             mw.Show();
@@ -118,29 +114,19 @@ namespace SVR_WPF
             return credential;
         }
 
-        private bool CheckConnection(bool check)
+        private void CheckConnection()
         {
             try
             {
-                Ping myPing = new Ping();
-                String host = "google.com";
-                byte[] buffer = new byte[32];
-                int timeout = 2000;
-                PingOptions pingOptions = new PingOptions();
-                PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
-                if (reply.Status == IPStatus.Success)
+                using (var client = new WebClient() { Proxy = null })
+                using (client.OpenRead("http://google.com/"))
                 {
                     check = true;
                 }
-                else
-                {
-                    check = false;
-                }
-                return check;
             }
-            catch (Exception)
+            catch
             {
-                return check = false;
+                check = false;
             }
         }
     }
