@@ -20,15 +20,16 @@ namespace SVR_WPF
         static string[] Scopes = { DriveService.Scope.Drive, DriveService.Scope.DriveFile };
 
         static string ApplicationName = "SVR Database";
+        bool check;
 
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
-            bool check = false;
             CheckConnection(check);
             if (check == true)
             {
                 UserCredential credential;
                 credential = GetCredentials();
+                MessageBox.Show("1");
 
                 DateTime dt = new DateTime();
                 DateTime dy = new DateTime();
@@ -71,7 +72,10 @@ namespace SVR_WPF
                     uploadFile(folder + "\\Student Violation Records\\StudentViolationRecords.sdf", service);
                 }
             }
-
+            else
+            {
+                MessageBox.Show("2");
+            }
             MainWindow mw = new MainWindow();
             mw.Show();
         }
