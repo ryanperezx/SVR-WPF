@@ -47,7 +47,6 @@ namespace SVR_WPF
             txtStudNo.Text = studNo.ToString();
             txtResidence.Text = residence;
             txtFullName.Text = fullName;
-            txtLC.Text = lastChanceCount.ToString();
             txtProb.Text = probiCount.ToString();
             updateListView();
         }
@@ -126,7 +125,7 @@ namespace SVR_WPF
             }
         }
 
-        private void btnGenReport_Click(object sender, RoutedEventArgs e)
+        private void btnPrintReport_Click(object sender, RoutedEventArgs e)
         {
             object oMissing = Missing.Value;
             object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
@@ -277,11 +276,12 @@ namespace SVR_WPF
                 }
             }
             oTable.Rows[1].Range.Font.Bold = 1;
-
             //Add text after the chart.
             wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
-
+            oWord.PrintOut();
         }
+
+
     }
 }

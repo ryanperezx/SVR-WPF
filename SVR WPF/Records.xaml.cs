@@ -576,14 +576,13 @@ namespace SVR_WPF
                                         }
                                     }
                                 }
-                                disableFields();
-                                updateViolations();
-                                emptyValues();
-                                violationsHolder.Clear();
-                                lvViolations.Items.Clear();
-                                i = 1;
                             }
-
+                            disableFields();
+                            updateViolations();
+                            emptyValues();
+                            violationsHolder.Clear();
+                            lvViolations.Items.Clear();
+                            i = 1;
                         }
                         else
                         {

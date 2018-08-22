@@ -46,11 +46,10 @@
         <TextBox x:Name="txtInstiViolation" HorizontalAlignment="Left" Height="32" Margin="274,448,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
         <TextBox x:Name="txtAcademicViolation" HorizontalAlignment="Left" Height="32" Margin="633,447,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
         <TextBox x:Name="txtDepartViolation" HorizontalAlignment="Left" Height="32" Margin="1015,447,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
-        <Button x:Name="btnGenReport" Content="GENERATE REPORT"  Height="40" Margin="535,595,0,0" Click="btnGenReport_Click" Width="155" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label Content="Probationary Count :" HorizontalAlignment="Left" Margin="312,512,0,0"  FontSize="15" VerticalAlignment="Top" Height="32"/>
-        <TextBox x:Name="txtProb" HorizontalAlignment="Left" Height="32" Margin="464,507,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
-        <Label Content="Last Chance Count :" HorizontalAlignment="Left" Margin="682,512,0,0"  FontSize="15" VerticalAlignment="Top" Height="32"/>
-        <TextBox x:Name="txtLC" HorizontalAlignment="Left" Height="32" Margin="828,507,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <Label Content="Probationary Count :" HorizontalAlignment="Left" Margin="458,520,0,0"  FontSize="15" VerticalAlignment="Top" Height="32"/>
+        <TextBox x:Name="txtProb" HorizontalAlignment="Left" Height="32" Margin="610,515,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" IsReadOnly="True"/>
+        <Button x:Name="btnPrintReport" Content="PRINT REPORT"  Height="40" Margin="405,595,0,0" Click="btnPrintReport_Click" Width="155" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Button x:Name="btnSaveReport" Content="SAVE REPORT"  Height="Auto" Margin="650,595,0,36" Width="155" HorizontalAlignment="Left"/>
 
     </Grid>
 </Window>
