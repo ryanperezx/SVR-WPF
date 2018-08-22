@@ -18,7 +18,7 @@
         WindowStartupLocation="CenterScreen"
         Foreground="White">
     <Grid>
-        <Label Content="Student Violation Records" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="25" Width="318" Height="42" FontWeight="Bold" Margin="456,23,456,469" />
+        <Label Content="Student Violation Records" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="25" Width="318" Height="42" FontWeight="Bold" Margin="445,23,467,469" />
         <Label x:Name="lblSem" Content="lblSem" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="95" Height="42" FontWeight="Bold" Margin="459,65,676,427" />
         <Label x:Name="lblyrStart" Content="lblyrStart" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="51" Height="42" FontWeight="Bold" Margin="559,65,620,427" RenderTransformOrigin="0.526,0.5" />
         <Label Content="-" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="18" Width="20" Height="42" FontWeight="Bold" Margin="635,65,575,427" RenderTransformOrigin="0.526,0.5" />
@@ -39,6 +39,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnGenReport" Content="Generate Report" HorizontalAlignment="Center" Width="142" Margin="544,480,544,14" Height="Auto" Click="btnGenReport_Click"/>
+        <Button x:Name="btnGenReport" Content="GENERATE REPORT" Height="40" Margin="535,474,0,0"  Click="btnGenReport_Click" Width="155" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </Window>

@@ -10,7 +10,7 @@ namespace SVR_WPF
     public partial class ReportSpecific : Window
     {
         public int studNo;
-        int institutionalCount, departmentalCount, academicCount;
+        int institutionalCount, departmentalCount, academicCount, probiCount, lastChanceCount;
         string residence, fullName;
         int i = 1;
         int row = 1, column = 8;
@@ -22,7 +22,7 @@ namespace SVR_WPF
             InitializeComponent();
             this.studNo = studNo;
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + GivenName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus FROM StudentInfo WHERE StudentNo = @studentNo", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + FirstName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus, CounterLastChance, CounterProbi FROM StudentInfo WHERE StudentNo = @studentNo", conn))
             {
                 cmd.Parameters.AddWithValue("@studentNo", studNo);
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -34,12 +34,21 @@ namespace SVR_WPF
 
                         int residenceIndex = reader.GetOrdinal("ResidenceStatus");
                         residence = Convert.ToString(reader.GetValue(residenceIndex));
+
+                        int probiCountIndex = reader.GetOrdinal("CounterProbi");
+                        probiCount = Convert.ToInt32(reader.GetValue(probiCountIndex));
+
+                        int lastChanceIndex = reader.GetOrdinal("CounterLastChance");
+                        lastChanceCount = Convert.ToInt32(reader.GetValue(lastChanceIndex));
+
                     }
                 }
             }
             txtStudNo.Text = studNo.ToString();
             txtResidence.Text = residence;
             txtFullName.Text = fullName;
+            txtLC.Text = lastChanceCount.ToString();
+            txtProb.Text = probiCount.ToString();
             updateListView();
         }
 
@@ -129,6 +138,14 @@ namespace SVR_WPF
             oWord.Visible = true;
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
             ref oMissing, ref oMissing);
+
+            Word.Paragraph oPara;
+            oPara = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara.Range.Text = "Adamson Computer Science Department";
+            oPara.Range.Font.Size = 18;
+            oPara.Range.Font.Bold = 1;
+            oPara.Format.SpaceAfter = 1;    //1 pt spacing after paragraph.
+            oPara.Range.InsertParagraphAfter();
 
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
@@ -236,11 +253,6 @@ namespace SVR_WPF
 
                                 int violationTypeIndex = dr.GetOrdinal("ViolationType");
                                 string violationType = Convert.ToString(dr.GetValue(violationTypeIndex));
-
-                                if (violationType.Equals("Institutional"))
-                                    institutionalCount += 1;
-                                else if (violationType.Equals("Departmental"))
-                                    departmentalCount += 1;
 
                                 int violationNameIndex = dr.GetOrdinal("ViolationName");
                                 string violationName = Convert.ToString(dr.GetValue(violationNameIndex));

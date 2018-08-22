@@ -22,7 +22,6 @@ namespace SVR_WPF
             if (txtUser.Text == "" && txtPassword.Password == "")
             {
                 txtUser.Focus();
-                //DialogHost.Show("test");
 
             }
             else if (txtPassword.Password == "")
@@ -67,16 +66,18 @@ namespace SVR_WPF
                             fName = dr.GetString(3);
                             mName = dr.GetString(4);
 
-                            SqlCeCommand cmd2 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = 0", conn);
-                            int ordinal = 0;
-                            ordinal = dr.GetOrdinal("userLevel");
-                            userLevel = dr.GetInt32(ordinal);
-                            dr.Close();
-                            dr.Dispose();
-                            cmd2.ExecuteNonQuery();
-                            MessageBox.Show("Login Successful");
-                            Log = LogManager.GetLogger("userLogin");
-                            Log.Info(" Account Name: " + lName + ", " + fName + " " + mName + " has logged in.");
+                            using (SqlCeCommand cmd2 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = 0", conn))
+                            {
+                                int ordinal = 0;
+                                ordinal = dr.GetOrdinal("userLevel");
+                                userLevel = dr.GetInt32(ordinal);
+                                dr.Close();
+                                dr.Dispose();
+                                cmd2.ExecuteNonQuery();
+                                MessageBox.Show("Login Successful");
+                                Log = LogManager.GetLogger("userLogin");
+                                Log.Info(" Account Name: " + txtUser.Text + " has logged in.");
+                            }
 
                         }
 
@@ -97,12 +98,16 @@ namespace SVR_WPF
                                     value = dr.GetString(ordinal);
                                     if (value.Equals(un))
                                     {
-                                        SqlCeCommand cmd3 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = loginAttempts + 1 WHERE userID = @un", conn);
-                                        cmd3.Parameters.AddWithValue("@un", un);
-                                        dr.Close();
-                                        dr.Dispose();
-                                        cmd3.ExecuteNonQuery();
-                                        cmd3.Dispose();
+                                        using (SqlCeCommand cmd3 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = loginAttempts + 1 WHERE userID = @un", conn))
+                                        {
+
+
+                                            cmd3.Parameters.AddWithValue("@un", un);
+                                            dr.Close();
+                                            dr.Dispose();
+                                            cmd3.ExecuteNonQuery();
+                                            cmd3.Dispose();
+                                        }
                                     }
                                 }
                             }
@@ -156,11 +161,11 @@ namespace SVR_WPF
                                 string input = ar.Answer;
                                 if (input.Equals(answer))
                                 {
-                                    SqlCeCommand cmd2 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = 0 WHERE userID = @un", conn);
-                                    cmd2.Parameters.AddWithValue("@un", user);
-                                    cmd2.ExecuteNonQuery();
-                                    cmd2.Dispose();
-
+                                    using (SqlCeCommand cmd2 = new SqlCeCommand("UPDATE Accounts SET loginAttempts = 0 WHERE userID = @un", conn))
+                                    {
+                                        cmd2.Parameters.AddWithValue("@un", user);
+                                        cmd2.ExecuteNonQuery();
+                                    }
                                     MessageBoxResult cp = MessageBox.Show("Account has been unlocked. Would you like to change password ?", "Change Password", btnMessageBox, icnMessageBox);
                                     switch (cp)
                                     {

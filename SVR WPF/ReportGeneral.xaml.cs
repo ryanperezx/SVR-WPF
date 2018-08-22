@@ -23,8 +23,6 @@ namespace SVR_WPF
         int i = 1;
         int row = 1, column = 9;
         string[] genRep = new string[10];
-        SqlCeConnection conn = DBUtils.GetDBConnection();
-
 
         public ReportGeneral(string period, string syFrom, string syTo, string violationName, string violationType, string residence)
         {
@@ -44,10 +42,11 @@ namespace SVR_WPF
 
         private void updateListView()
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
             if (violationType == "Academic" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ") AND (ViolationType = 'Academic')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -114,7 +113,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -181,7 +180,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -248,7 +247,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Academic')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -316,7 +315,7 @@ namespace SVR_WPF
 
             else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -383,7 +382,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -450,7 +449,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -517,7 +516,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Institutional')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -587,7 +586,7 @@ namespace SVR_WPF
 
             else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -654,7 +653,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -721,7 +720,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -788,7 +787,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Departmental')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -856,7 +855,7 @@ namespace SVR_WPF
 
             else if (period == "ALL" && violationType == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -922,7 +921,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL" && violationType == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -989,7 +988,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1057,7 +1056,7 @@ namespace SVR_WPF
 
             else if (violationType == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1124,7 +1123,7 @@ namespace SVR_WPF
             }
             else if (violationType == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1191,7 +1190,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1258,7 +1257,7 @@ namespace SVR_WPF
             } //
             else if (residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1325,7 +1324,7 @@ namespace SVR_WPF
             }
             else
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     lvGenReport.Items.Clear();
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -1395,6 +1394,7 @@ namespace SVR_WPF
 
         private void btnGenReport_Click(object sender, RoutedEventArgs e)
         {
+            SqlCeConnection conn = DBUtils.GetDBConnection();
             object oMissing = Missing.Value;
             object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
 
@@ -1406,6 +1406,14 @@ namespace SVR_WPF
             oDoc = oWord.Documents.Add(ref oMissing, ref oMissing,
             ref oMissing, ref oMissing);
 
+            Word.Paragraph oPara;
+            oPara = oDoc.Content.Paragraphs.Add(ref oMissing);
+            oPara.Range.Text = "Adamson Computer Science Department";
+            oPara.Range.Font.Size = 18;
+            oPara.Range.Font.Bold = 1;
+            oPara.Format.SpaceAfter = 1;    //1 pt spacing after paragraph.
+            oPara.Range.InsertParagraphAfter();
+
             //Insert a paragraph at the beginning of the document.
             Word.Paragraph oPara1;
             oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
@@ -1416,10 +1424,10 @@ namespace SVR_WPF
             }
             else
             {
-                oPara1.Range.Text = "Violation Type: " + violationType + " Violation Name: " + violationName;
+                oPara1.Range.Text = "Violation Type: " + violationType + "\nViolation Name: " + violationName;
 
             }
-            oPara1.Range.Font.Size = 18;
+            oPara1.Range.Font.Size = 15;
             oPara1.Range.Font.Bold = 1;
             oPara1.Format.SpaceAfter = 1;    //1 pt spacing after paragraph.
             oPara1.Range.InsertParagraphAfter();
@@ -1428,7 +1436,7 @@ namespace SVR_WPF
             Word.Paragraph oPara2;
             object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
             oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
-            oPara2.Range.Text = "Period: " + period + "  SY: " + syFrom + "-" + syTo;
+            oPara2.Range.Text = "Period: " + period + "\nSY: " + syFrom + "-" + syTo;
             oPara1.Range.Font.Bold = 0;
             oPara2.Range.Font.Size = 14;
 
@@ -1465,7 +1473,7 @@ namespace SVR_WPF
             conn.Open();
             if (violationType == "Academic" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ") AND (ViolationType = 'Academic')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1524,7 +1532,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1585,7 +1593,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Academic') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1646,7 +1654,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Academic" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Academic')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Academic')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1708,7 +1716,7 @@ namespace SVR_WPF
 
             else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1769,7 +1777,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1830,7 +1838,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Institutional') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1891,7 +1899,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Institutional" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Institutional')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Institutional')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -1953,7 +1961,7 @@ namespace SVR_WPF
 
             else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between 2015 and 2019)  AND (ViolationType = 'Departmental')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2014,7 +2022,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2075,7 +2083,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL" && period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental') AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")  AND (ViolationType = 'Departmental') AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2133,7 +2141,7 @@ namespace SVR_WPF
             }
             else if (violationType == "Departmental" && violationName == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Departmental')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "') AND (ViolationType = 'Departmental')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2192,7 +2200,7 @@ namespace SVR_WPF
 
             else if (period == "ALL" && violationType == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2250,7 +2258,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL" && violationType == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2309,7 +2317,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2367,7 +2375,7 @@ namespace SVR_WPF
 
             else if (violationType == "ALL" && residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2423,7 +2431,7 @@ namespace SVR_WPF
             }
             else if (violationType == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2479,7 +2487,7 @@ namespace SVR_WPF
             }
             else if (period == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2535,7 +2543,7 @@ namespace SVR_WPF
             } //
             else if (residence == "ALL")
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ")", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ")", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2591,7 +2599,7 @@ namespace SVR_WPF
             }
             else
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.GivenName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SY as SY, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (rd.Period = '" + period + "') AND (SY between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("SELECT rd.RecordNo as RecordNo, rd.StudentNo as StudentNo, rd.ViolationCode as ViolationCode, rd.DateCommitted as DateCommitted, si.LastName + ', ' + si.firstName + ' ' + COALESCE(si.MiddleName, '') AS [Full Name], si.ResidenceStatus as ResidenceStatus, rd.Period as Period, rd.SYint as SYint, rd.Remarks as Remarks, vd.ViolationType as ViolationType, vd.ViolationName FROM RecordDetails AS rd INNER JOIN StudentInfo AS si ON rd.StudentNo = si.StudentNo INNER JOIN ViolationDetails AS vd ON rd.ViolationCode = vd.ViolationCode WHERE (vd.ViolationType = '" + violationType + "') AND (vd.ViolationName = '" + violationName + "') AND (rd.Period = '" + period + "') AND (SYint between " + syFrom + " and " + syTo + ") AND (si.ResidenceStatus = '" + residence + "')", conn))
                 {
                     using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
                     {
@@ -2647,7 +2655,7 @@ namespace SVR_WPF
                 }
             }
             oTable.Rows[1].Range.Font.Bold = 1;
-
+            conn.Close();
             wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
 
         }

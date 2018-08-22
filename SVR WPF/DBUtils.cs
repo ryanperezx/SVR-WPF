@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.IO;
 using System.Data.SqlServerCe;
 namespace SVR_WPF
 {
@@ -7,7 +7,9 @@ namespace SVR_WPF
     {
         public static SqlCeConnection GetDBConnection()
         {
-            string datasource = "StudentViolationRecords.sdf";
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            string datasource = folder + "\\Student Violation Records\\StudentViolationRecords.sdf";
             return DBSQLServerUtils.GetDBConnection(datasource);
         }
     }

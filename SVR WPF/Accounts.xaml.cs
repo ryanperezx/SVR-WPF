@@ -99,12 +99,12 @@ namespace SVR_WPF
 
             if (txtPassword.Password.Equals(txtConfirm.Password))
             {
-                using (SqlCeCommand cmd = new SqlCeCommand("INSERT INTO Accounts VALUES (@userID, @Password, @LastName, @GivenName, @MiddleName, @securityQuestion, @securityAnswer, @userLevel, @loginAttempts)", conn))
+                using (SqlCeCommand cmd = new SqlCeCommand("INSERT INTO Accounts VALUES (@userID, @Password, @LastName, @firstName, @MiddleName, @securityQuestion, @securityAnswer, @userLevel, @loginAttempts)", conn))
                 {
                     cmd.Parameters.AddWithValue("@userID", un);
                     cmd.Parameters.AddWithValue("@Password", pw);
                     cmd.Parameters.AddWithValue("@LastName", lName);
-                    cmd.Parameters.AddWithValue("@GivenName", gName);
+                    cmd.Parameters.AddWithValue("@firstName", gName);
                     cmd.Parameters.AddWithValue("@MiddleName", mName);
                     cmd.Parameters.AddWithValue("@securityQuestion", sq);
                     cmd.Parameters.AddWithValue("@securityAnswer", sa);
@@ -145,8 +145,9 @@ namespace SVR_WPF
                 {
                     SqlCeConnection conn = DBUtils.GetDBConnection();
                     conn.Open();
-                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Accounts where userID ='" + txtUsername.Text + "'", conn))
+                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from Accounts where userID = @userID", conn))
                     {
+                        cmd.Parameters.AddWithValue("@userID", txtUsername.Text);
                         int userCount;
                         userCount = (int)cmd.ExecuteScalar();
                         if (userCount > 0)
@@ -164,7 +165,7 @@ namespace SVR_WPF
                                         //0
                                         string user = reader.GetValue(1).ToString();
                                         //1
-                                        int gNameIndex = reader.GetOrdinal("givenName");
+                                        int gNameIndex = reader.GetOrdinal("FirstName");
                                         string fName = Convert.ToString(reader.GetValue(gNameIndex));
                                         //2
                                         int mNameIndex = reader.GetOrdinal("middleName");

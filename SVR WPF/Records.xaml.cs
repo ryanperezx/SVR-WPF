@@ -80,13 +80,13 @@ namespace SVR_WPF
 
         private void cmbViolate_TextChanged(object sender, TextChangedEventArgs e)
         {
-            cmbViolationType.Items.Clear();
+            cmbViolationName.Items.Clear();
             if (txtViolate.Text == "Departmental")
             {
-                lblViolationType.Content = "Departmental: ";
+                lblViolationName.Content = "Departmental: ";
 
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -101,10 +101,10 @@ namespace SVR_WPF
             }
             else if (txtViolate.Text == "Institutional")
             {
-                lblViolationType.Content = "Institutional: ";
+                lblViolationName.Content = "Institutional: ";
 
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -119,9 +119,9 @@ namespace SVR_WPF
             }
             else if (txtViolate.Text == "Academic")
             {
-                lblViolationType.Content = "Academic: ";
-                lblViolationType.Visibility = Visibility.Visible;
-                cmbViolationType.Visibility = Visibility.Visible;
+                lblViolationName.Content = "Academic: ";
+                lblViolationName.Visibility = Visibility.Visible;
+                cmbViolationName.Visibility = Visibility.Visible;
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
@@ -135,18 +135,13 @@ namespace SVR_WPF
             }
             else
             {
-                lblViolationType.Visibility = Visibility.Hidden;
-                txtRemarks.Visibility = Visibility.Hidden;
-                cmbViolationType.Visibility = Visibility.Hidden;
-                lblRemarks.Visibility = Visibility.Hidden;
-                lblSpecify.Visibility = Visibility.Hidden;
-                txtSpecify.Visibility = Visibility.Hidden;
-                lblViolationDesc.Visibility = Visibility.Hidden;
-                txtViolationDesc.Visibility = Visibility.Hidden;
-                btnViolateAdd.Visibility = Visibility.Hidden;
+                chkYesLC.IsEnabled = false;
+                chkNoLC.IsEnabled = false;
+                chkYesProb.IsEnabled = false;
+                chkNoProb.IsEnabled = false;
             }
         }
-        private void cmbViolationType_TextChanged(object sender, TextChangedEventArgs e)
+        private void cmbViolationName_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtViolationType.Text == "Others (Please specify)")
             {
@@ -179,7 +174,7 @@ namespace SVR_WPF
             else if (txtViolationType.Text == "")
             {
                 MessageBox.Show("Please fill up the missing fields!");
-                cmbViolationType.Focus();
+                cmbViolationName.Focus();
             }
             else
             {
@@ -228,6 +223,19 @@ namespace SVR_WPF
                     {
                         violationName = txtViolationType.Text;
                         violations[1] = txtViolationType.Text;
+                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT violationDesc from ViolationDetails where violationName= @violationName", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@violationName", violationName);
+                            using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            {
+                                if (reader.HasRows)
+                                {
+                                    reader.Read();
+                                    int violationDescIndex = reader.GetOrdinal("violationDesc");
+                                    violationDesc = Convert.ToString(reader.GetValue(violationDescIndex));
+                                }
+                            }
+                        }
                     }
                     if (chkYesLC.IsChecked ?? true)
                     {
@@ -235,7 +243,7 @@ namespace SVR_WPF
                         chkYesLC.IsChecked = false;
                         chkNoLC.IsChecked = true;
                     }
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                     countDepart++;
                 }
                 else if (txtViolate.Text == "Institutional")
@@ -280,9 +288,22 @@ namespace SVR_WPF
                     {
                         violationName = txtViolationType.Text;
                         violations[1] = txtViolationType.Text;
+                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT violationDesc from ViolationDetails where violationName= @violationName", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@violationName", violationName);
+                            using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            {
+                                if (reader.HasRows)
+                                {
+                                    reader.Read();
+                                    int violationDescIndex = reader.GetOrdinal("violationDesc");
+                                    violationDesc = Convert.ToString(reader.GetValue(violationDescIndex));
+                                }
+                            }
+                        }
                     }
                     countInsti++;
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                 }
                 else if (cmbViolate.Text == "Academic")
                 {
@@ -328,6 +349,19 @@ namespace SVR_WPF
                     {
                         violationName = txtViolationType.Text;
                         violations[1] = txtViolationType.Text;
+                        using (SqlCeCommand cmd = new SqlCeCommand("SELECT violationDesc from ViolationDetails where violationName= @violationName", conn))
+                        {
+                            cmd.Parameters.AddWithValue("@violationName", violationName);
+                            using (DbDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
+                            {
+                                if (reader.HasRows)
+                                {
+                                    reader.Read();
+                                    int violationDescIndex = reader.GetOrdinal("violationDesc");
+                                    violationDesc = Convert.ToString(reader.GetValue(violationDescIndex));
+                                }
+                            }
+                        }
                     }
                     if (chkYesLC.IsChecked ?? true)
                     {
@@ -341,17 +375,17 @@ namespace SVR_WPF
                         countProbi++;
                         chkYesProb.IsChecked = false;
                         chkNoProb.IsChecked = true;
-
                     }
-                    cmbViolationType.SelectedIndex = -1;
+                    cmbViolationName.SelectedIndex = -1;
                     countAcademic++;
                 }
                 violations[0] = i.ToString();
                 violationsHolder.Add(violations[1]);
-                lvViolations.Items.Add(new ListViewViolations {
+                lvViolations.Items.Add(new ListViewViolations
+                {
                     i = this.i,
                     violationName = violations[1],
-                    violationDesc = txtViolationDesc.Text
+                    violationDesc = this.violationDesc
                 });
                 txtSpecify.Text = "";
                 txtViolationDesc.Text = "";
@@ -371,10 +405,9 @@ namespace SVR_WPF
         {
             if (e.Key == Key.Enter)
             {
-                if (txtStudNo.Text == "")
+                if (string.IsNullOrEmpty(txtStudNo.Text))
                 {
                     MessageBox.Show("Please input student number!");
-                    txtStudNo.Text = "";
                     emptyComboBox();
                     emptyTextbox();
                 }
@@ -386,25 +419,13 @@ namespace SVR_WPF
                     {
                         cmd.Parameters.AddWithValue("@studNo", txtStudNo.Text);
                         int studCount;
-                        int check;
-                        if (!int.TryParse(txtStudNo.Text, out check))
-                        {
-                            MessageBox.Show("Invalid Input!");
-                            emptyComboBox();
-                            emptyTextbox();
-                            return;
-                        }
-                        else
-                        {
-                            studCount = (int)cmd.ExecuteScalar();
-                        }
+                        studCount = (int)cmd.ExecuteScalar();
                         if (studCount > 0)
                         {
                             string studentNumber = txtStudNo.Text;
-                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo;", conn))
+                            using (SqlCeCommand cmd1 = new SqlCeCommand("Select * from StudentInfo where studentNo = @studentNo", conn))
                             {
                                 cmd1.Parameters.AddWithValue("@studentNo", studentNumber);
-                                cmd1.Connection = conn;
                                 using (DbDataReader reader = cmd1.ExecuteResultSet(ResultSetOptions.Scrollable))
                                 {
                                     if (reader.HasRows)
@@ -417,7 +438,7 @@ namespace SVR_WPF
                                         int lNameIndex = reader.GetOrdinal("lastName");
                                         string lName = Convert.ToString(reader.GetValue(lNameIndex));
                                         //3
-                                        int fNameIndex = reader.GetOrdinal("givenName");
+                                        int fNameIndex = reader.GetOrdinal("firstName");
                                         string fName = Convert.ToString(reader.GetValue(fNameIndex));
                                         //4
                                         int mNameIndex = reader.GetOrdinal("middleName");
@@ -464,71 +485,61 @@ namespace SVR_WPF
                 }
                 else
                 {
-                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo =" + txtStudNo.Text, conn))
+                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo", conn))
                     {
                         cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                         int studNo;
-                        int studCount;
-                        if (!int.TryParse(txtStudNo.Text, out int check))
-                        {
-                            MessageBox.Show("Invalid Input!");
-                            return;
-                        }
-                        else
-                        {
-                            studCount = (int)cmd.ExecuteScalar();
-                        }
+                        int studCount = (int)cmd.ExecuteScalar();
                         if (studCount > 0)
                         {
-                                studNo = int.Parse(txtStudNo.Text);
-                                string lastName = txtLName.Text;
-                                string firstName = txtFName.Text;
-                                string middleName = txtMName.Text;
-                                string residence = cmbResidence.Text;
-                                string period = cmbPeriod.Text;
-                                string schoolYear = cmbSY.Text;
-                                int sy = int.Parse(schoolYear.Split('-')[0]);
-                                violationType = cmbViolate.Text;
+                            studNo = int.Parse(txtStudNo.Text);
+                            string lastName = txtLName.Text;
+                            string firstName = txtFName.Text;
+                            string middleName = txtMName.Text;
+                            string residence = cmbResidence.Text;
+                            string period = cmbPeriod.Text;
+                            string schoolYear = cmbSY.Text;
+                            int sy = int.Parse(schoolYear.Split('-')[0]);
+                            violationType = cmbViolate.Text;
 
-                                string remarks;
-                                if (txtRemarks.Text == "")
-                                {
-                                    remarks = "None";
-                                }
-                                else
-                                {
-                                    remarks = txtRemarks.Text;
-                                }
-                                string date = txtDate.Text;
+                            string remarks;
+                            if (txtRemarks.Text == "")
+                            {
+                                remarks = "None";
+                            }
+                            else
+                            {
+                                remarks = txtRemarks.Text;
+                            }
+                            string date = txtDate.Text;
 
-                                using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo = @studentNo;", conn))
-                                {
+                            using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo = @studentNo", conn))
+                            {
 
-                                    command.Parameters.AddWithValue("@counterInsti", countInsti);
-                                    command.Parameters.AddWithValue("@counterDept", countDepart);
-                                    command.Parameters.AddWithValue("@counterAcad", countAcademic);
-                                    command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                    command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
-                                    command.Parameters.AddWithValue("@CounterProbi", countProbi);
-                                    try
-                                    {
-                                        command.ExecuteNonQuery();
-                                        MessageBox.Show("Added Successfully");
-                                        Log = LogManager.GetLogger("addStudent");
-                                        Log.Info("Student no: " + studNo + " added to database!");
-                                        MessageBox.Show(countLastChance.ToString());
-                                        MessageBox.Show(countProbi.ToString());
-                                    }
-                                    catch (SqlException ex)
-                                    {
-                                        Log = LogManager.GetLogger("*");
-                                        Log.Error(ex, "Query Error");
-                                    }
+                                command.Parameters.AddWithValue("@counterInsti", countInsti);
+                                command.Parameters.AddWithValue("@counterDept", countDepart);
+                                command.Parameters.AddWithValue("@counterAcad", countAcademic);
+                                command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
+                                command.Parameters.AddWithValue("@CounterProbi", countProbi);
+                                try
+                                {
+                                    command.ExecuteNonQuery();
+                                    MessageBox.Show("Added Successfully");
+                                    Log = LogManager.GetLogger("addStudent");
+                                    Log.Info("Student no: " + studNo + " added to database!");
                                 }
+                                catch (SqlException ex)
+                                {
+                                    Log = LogManager.GetLogger("*");
+                                    Log.Error(ex, "Query Error");
+                                }
+                            }
                             foreach (var violation in violationsHolder)
                             {
-                                using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = '" + violation + "'", conn))
+                                using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = @violationName", conn))
                                 {
+                                    cmd2.Parameters.AddWithValue("@violationName", violation);
                                     int violationCode = 0;
                                     using (DbDataReader reader = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
                                     {
@@ -538,13 +549,14 @@ namespace SVR_WPF
                                             violationCode = Convert.ToInt32(reader.GetValue(0));
                                         }
                                     }
-                                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SY, @Remarks)", conn))
+                                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SYint, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SYint, @SY, @Remarks)", conn))
                                     {
                                         command.Parameters.AddWithValue("@StudentNo", studNo);
                                         command.Parameters.AddWithValue("@ViolationCode", violationCode);
                                         command.Parameters.AddWithValue("@DateCommitted", date);
                                         command.Parameters.AddWithValue("@Period", period);
-                                        command.Parameters.AddWithValue("@SY", sy);
+                                        command.Parameters.AddWithValue("@SYint", sy);
+                                        command.Parameters.AddWithValue("@SY", schoolYear);
                                         command.Parameters.AddWithValue("@Remarks", remarks);
 
                                         try
@@ -579,15 +591,7 @@ namespace SVR_WPF
                             {
                                 try
                                 {
-                                    if (!int.TryParse(txtStudNo.Text, out check))
-                                    {
-                                        MessageBox.Show("Invalid Input!");
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        studNo = int.Parse(txtStudNo.Text);
-                                    }
+                                    studNo = int.Parse(txtStudNo.Text);
                                 }
                                 catch (SqlException ex)
                                 {
@@ -614,11 +618,11 @@ namespace SVR_WPF
                                 }
                                 string date = txtDate.Text;
 
-                                using (SqlCeCommand command = new SqlCeCommand("INSERT INTO StudentInfo (studentNo, lastName, givenName, middleName, residenceStatus, counterLastChance, counterDept, counterAcad, counterProbi, counterInsti) VALUES (@studentNo, @LastName, @GivenName, @MiddleName, @residenceStatus, @counterLastChance, @counterDept, @counterAcad , @counterProbi, @counterInsti)", conn))
+                                using (SqlCeCommand command = new SqlCeCommand("INSERT INTO StudentInfo (studentNo, lastName, firstName, middleName, residenceStatus, counterLastChance, counterDept, counterAcad, counterProbi, counterInsti) VALUES (@studentNo, @LastName, @firstName, @MiddleName, @residenceStatus, @counterLastChance, @counterDept, @counterAcad , @counterProbi, @counterInsti)", conn))
                                 {
                                     command.Parameters.AddWithValue("@studentNo", studNo);
                                     command.Parameters.AddWithValue("@LastName", lastName);
-                                    command.Parameters.AddWithValue("@GivenName", firstName);
+                                    command.Parameters.AddWithValue("@firstName", firstName);
                                     command.Parameters.AddWithValue("@MiddleName", middleName);
                                     command.Parameters.AddWithValue("@residenceStatus", residence);
                                     command.Parameters.AddWithValue("@counterInsti", countInsti);
@@ -643,8 +647,9 @@ namespace SVR_WPF
                                 }
                                 foreach (var violation in violationsHolder)
                                 {
-                                    using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = '" + violationName + "'", conn))
+                                    using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = @violationName", conn))
                                     {
+                                        cmd2.Parameters.AddWithValue("@violationName", violation);
                                         int violationCode = 0;
                                         using (DbDataReader reader = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
                                         {
@@ -655,13 +660,14 @@ namespace SVR_WPF
                                             }
                                         }
 
-                                        using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SY, Remarks) VALUES (@studentNo, @ViolationCode, @dateCommitted, @Period, @SY, @Remarks)", conn))
+                                        using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SYint, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SYint, @SY, @Remarks)", conn))
                                         {
-                                            command.Parameters.AddWithValue("@studentNo", studNo);
+                                            command.Parameters.AddWithValue("@StudentNo", studNo);
                                             command.Parameters.AddWithValue("@ViolationCode", violationCode);
-                                            command.Parameters.AddWithValue("@dateCommitted", date);
+                                            command.Parameters.AddWithValue("@DateCommitted", date);
                                             command.Parameters.AddWithValue("@Period", period);
-                                            command.Parameters.AddWithValue("@SY", sy);
+                                            command.Parameters.AddWithValue("@SYint", sy);
+                                            command.Parameters.AddWithValue("@SY", schoolYear);
                                             command.Parameters.AddWithValue("@Remarks", remarks);
 
                                             try
@@ -723,7 +729,7 @@ namespace SVR_WPF
                             string firstName = txtFName.Text;
                             string middleName = txtMName.Text;
                             string residence = cmbResidence.Text;
-                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE StudentInfo SET StudentNo = @StudNo, LastName = @LName, GivenName = @FName, MiddleName = @MName, ResidenceStatus = @residence where studentNo = @tempStudNo;", conn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("UPDATE StudentInfo SET StudentNo = @StudNo, LastName = @LName, firstName = @FName, MiddleName = @MName, ResidenceStatus = @residence where studentNo = @tempStudNo;", conn))
                             {
                                 cmd.Parameters.AddWithValue("@tempStudNo", tempStudNo);
                                 cmd.Parameters.AddWithValue("@StudNo", studNo);
@@ -768,7 +774,7 @@ namespace SVR_WPF
         }
         private void btnEdit_OnClick(object sender, RoutedEventArgs e)
         {
-            if (txtStudNo.Text == "")
+            if (string.IsNullOrEmpty(txtStudNo.Text))
             {
                 MessageBox.Show("Please input student number in the field before editing!");
             }
@@ -779,18 +785,7 @@ namespace SVR_WPF
                 using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo;", conn))
                 {
                     cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-
-                    int check;
-                    int studCount;
-                    if (!int.TryParse(txtStudNo.Text, out check))
-                    {
-                        MessageBox.Show("Invalid Input!");
-                        return;
-                    }
-                    else
-                    {
-                        studCount = (int)cmd.ExecuteScalar();
-                    }
+                    int studCount = (int)cmd.ExecuteScalar();
                     if (studCount > 0)
                     {
                         value = 2;
@@ -834,30 +829,25 @@ namespace SVR_WPF
                             {
                                 cnt.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                 int studCount;
-                                int check;
-                                if (!int.TryParse(txtStudNo.Text, out check))
-                                {
-                                    MessageBox.Show("Invalid Input!");
-                                    return;
-                                }
-                                else
-                                {
-                                    studCount = (int)cnt.ExecuteScalar();
-                                }
+                                studCount = (int)cnt.ExecuteScalar();
                                 if (studCount > 0)
                                 {
                                     int studNo = Convert.ToInt32(txtStudNo.Text);
                                     MessageBox.Show("Student " + txtStudNo.Text + " has an record in the archive! (Student has been deleted before)");
-                                    SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn);
-                                    command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-
-                                    command.ExecuteNonQuery();
-                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
+                                    using (SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn))
                                     {
+                                        command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                        command.ExecuteNonQuery();
+                                    }
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SYint, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SYint, SY, remarks from RecordDetails where studentNo = @studentNo", conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@studentNo", studNo);
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo= @studentNo;", conn);
-                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                        cmd1.ExecuteNonQuery();
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo= @studentNo", conn))
+                                        {
+                                            cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                            cmd1.ExecuteNonQuery();
+                                        }
                                     }
 
                                     Log = LogManager.GetLogger("studentAlreadyArchived");
@@ -869,32 +859,37 @@ namespace SVR_WPF
                                 }
                                 else
                                 {
-                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into StudentInfoArchive(studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti) select studentNo, LastName, GivenName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti from StudentInfo where studentNo = @studentNo;", conn))
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into StudentInfoArchive(studentNo, LastName, firstName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti) select studentNo, LastName, firstName, MiddleName, ResidenceStatus, CounterLastChance, CounterDept, CounterAcad, CounterProbi, CounterInsti from StudentInfo where studentNo = @studentNo;", conn))
                                     {
                                         cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn);
-                                        command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                        int count = command.ExecuteNonQuery();
-                                        if (count == 1)
+                                        using (SqlCeCommand command = new SqlCeCommand("Delete from StudentInfo where studentNo= @studentNo;", conn))
                                         {
-                                            MessageBox.Show("User record has been deleted!");
-                                            Log = LogManager.GetLogger("archiveStudent");
-                                            Log.Info(": Archived student no:" + txtStudNo.Text);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("User does not exist!");
-                                            return;
+                                            command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                            int count = command.ExecuteNonQuery();
+                                            if (count == 1)
+                                            {
+                                                MessageBox.Show("User record has been deleted!");
+                                                Log = LogManager.GetLogger("archiveStudent");
+                                                Log.Info(": Archived student no:" + txtStudNo.Text);
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("User does not exist!");
+                                                return;
+                                            }
                                         }
                                     }
                                     int studNo = Convert.ToInt32(txtStudNo.Text);
-                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SY, remarks from RecordDetails where studentNo =" + studNo, conn))
+                                    using (SqlCeCommand cmd = new SqlCeCommand("Insert Into RecordDetailsArchive(studentNo, ViolationCode, dateCommitted, Period, SYint, SY, remarks) select StudentNo, ViolationCode, dateCommitted, Period, SYint, SY, remarks from RecordDetails where studentNo = @studentNo", conn))
                                     {
+                                        cmd.Parameters.AddWithValue("@studentNo", studNo);
                                         cmd.ExecuteNonQuery();
-                                        SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo=@studentNo;", conn);
-                                        cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                        cmd1.ExecuteNonQuery();
+                                        using (SqlCeCommand cmd1 = new SqlCeCommand("Delete from RecordDetails where studentNo= @studentNo", conn))
+                                        {
+                                            cmd1.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                                            cmd1.ExecuteNonQuery();
+                                        }
                                     }
 
                                     Log = LogManager.GetLogger("archiveStudent");
@@ -968,8 +963,8 @@ namespace SVR_WPF
             btnViolateAdd.IsEnabled = false;
             btnViolateAdd.Visibility = Visibility.Hidden;
 
-            lblViolationType.Visibility = Visibility.Hidden;
-            cmbViolationType.Visibility = Visibility.Hidden;
+            lblViolationName.Visibility = Visibility.Hidden;
+            cmbViolationName.Visibility = Visibility.Hidden;
         }
         private void enableFields()
         {
@@ -1000,12 +995,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }
@@ -1018,12 +1013,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }
@@ -1036,12 +1031,12 @@ namespace SVR_WPF
                     {
                         if (reader.HasRows)
                         {
-                            cmbViolationType.Items.Clear();
-                            cmbViolationType.Items.Add("Others (Please specify)");
+                            cmbViolationName.Items.Clear();
+                            cmbViolationName.Items.Add("Others (Please specify)");
                             while (reader.Read())
                             {
                                 string ViolationName = reader["ViolationName"].ToString();
-                                cmbViolationType.Items.Add(ViolationName);
+                                cmbViolationName.Items.Add(ViolationName);
                             }
                         }
                     }
@@ -1062,12 +1057,12 @@ namespace SVR_WPF
         }
         private void checkAccountLevel()
         {
-            if(userLevel == 1)
+            if (userLevel == 1)
             {
                 btnEdit.IsEnabled = true;
                 btnDelete.IsEnabled = true;
             }
-            else if(userLevel == 2)
+            else if (userLevel == 2)
             {
                 btnEdit.IsEnabled = false;
                 btnDelete.IsEnabled = false;
