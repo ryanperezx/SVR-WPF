@@ -468,6 +468,7 @@ namespace SVR_WPF
         {
             SqlCeConnection conn = DBUtils.GetDBConnection();
             conn.Open();
+            
             if (txtStudNo.Text == "" || txtLName.Text == "" || txtFName.Text == "" || cmbResidence.Text == "")
             {
                 MessageBox.Show("Please fill up the missing fields!");
@@ -481,121 +482,20 @@ namespace SVR_WPF
                 }
                 else
                 {
-                    using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo", conn))
+                    if (lvViolations.Items.Count <= 0)
                     {
-                        cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                        int studNo;
-                        int studCount = (int)cmd.ExecuteScalar();
-                        if (studCount > 0)
+                        MessageBox.Show("There is no violation provided!");
+                    }
+                    else
+                    {
+                        using (SqlCeCommand cmd = new SqlCeCommand("Select COUNT(1) from StudentInfo where studentNo = @studentNo", conn))
                         {
-                            studNo = int.Parse(txtStudNo.Text);
-                            string lastName = txtLName.Text;
-                            string firstName = txtFName.Text;
-                            string middleName = txtMName.Text;
-                            string residence = cmbResidence.Text;
-                            string period = cmbPeriod.Text;
-                            string schoolYear = cmbSY.Text;
-                            int sy = int.Parse(schoolYear.Split('-')[0]);
-                            violationType = cmbViolate.Text;
-
-                            string remarks;
-                            if (txtRemarks.Text == "")
+                            cmd.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
+                            int studNo;
+                            int studCount = (int)cmd.ExecuteScalar();
+                            if (studCount > 0)
                             {
-                                remarks = "None";
-                            }
-                            else
-                            {
-                                remarks = txtRemarks.Text;
-                            }
-                            string date = txtDate.Text;
-
-                            using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo = @studentNo", conn))
-                            {
-
-                                command.Parameters.AddWithValue("@counterInsti", countInsti);
-                                command.Parameters.AddWithValue("@counterDept", countDepart);
-                                command.Parameters.AddWithValue("@counterAcad", countAcademic);
-                                command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
-                                command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
-                                command.Parameters.AddWithValue("@CounterProbi", countProbi);
-                                try
-                                {
-                                    command.ExecuteNonQuery();
-                                    MessageBox.Show("Added Successfully");
-                                    Log = LogManager.GetLogger("addStudent");
-                                    Log.Info("Student no: " + studNo + " added to database!");
-                                }
-                                catch (SqlException ex)
-                                {
-                                    Log = LogManager.GetLogger("*");
-                                    Log.Error(ex, "Query Error");
-                                }
-                            }
-                            foreach (var violation in violationsHolder)
-                            {
-                                using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = @violationName", conn))
-                                {
-                                    cmd2.Parameters.AddWithValue("@violationName", violation);
-                                    int violationCode = 0;
-                                    using (DbDataReader reader = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
-                                    {
-                                        if (reader.HasRows)
-                                        {
-                                            reader.Read();
-                                            violationCode = Convert.ToInt32(reader.GetValue(0));
-                                        }
-                                    }
-                                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SYint, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SYint, @SY, @Remarks)", conn))
-                                    {
-                                        command.Parameters.AddWithValue("@StudentNo", studNo);
-                                        command.Parameters.AddWithValue("@ViolationCode", violationCode);
-                                        command.Parameters.AddWithValue("@DateCommitted", date);
-                                        command.Parameters.AddWithValue("@Period", period);
-                                        command.Parameters.AddWithValue("@SYint", sy);
-                                        command.Parameters.AddWithValue("@SY", schoolYear);
-                                        command.Parameters.AddWithValue("@Remarks", remarks);
-
-                                        try
-                                        {
-                                            command.ExecuteNonQuery();
-                                            Log = LogManager.GetLogger("studentRecord");
-                                            Log.Info("Student no:" + studNo + " records added to database!");
-                                            emptyTextbox();
-                                            emptyComboBox();
-                                        }
-                                        catch (SqlException ex)
-                                        {
-                                            Log = LogManager.GetLogger("*");
-                                            Log.Error(ex, "Error has been encountered! Log has been updated with the error");
-                                            emptyTextbox();
-                                            emptyComboBox();
-                                        }
-                                    }
-                                }
-                                disableFields();
-                                updateViolations();
-                                emptyValues();
-                                violationsHolder.Clear();
-                                lvViolations.Items.Clear();
-                                i = 1;
-                            }
-
-                        }
-                        else
-                        {
-                            if (userLevel == 1)
-                            {
-                                try
-                                {
-                                    studNo = int.Parse(txtStudNo.Text);
-                                }
-                                catch (SqlException ex)
-                                {
-                                    MessageBox.Show("Query error! Log has been updated with the error");
-                                    Log = LogManager.GetLogger("*");
-                                    Log.Error(ex);
-                                    return;
-                                }
+                                studNo = int.Parse(txtStudNo.Text);
                                 string lastName = txtLName.Text;
                                 string firstName = txtFName.Text;
                                 string middleName = txtMName.Text;
@@ -603,6 +503,8 @@ namespace SVR_WPF
                                 string period = cmbPeriod.Text;
                                 string schoolYear = cmbSY.Text;
                                 int sy = int.Parse(schoolYear.Split('-')[0]);
+                                violationType = cmbViolate.Text;
+
                                 string remarks;
                                 if (txtRemarks.Text == "")
                                 {
@@ -614,31 +516,26 @@ namespace SVR_WPF
                                 }
                                 string date = txtDate.Text;
 
-                                using (SqlCeCommand command = new SqlCeCommand("INSERT INTO StudentInfo (studentNo, lastName, firstName, middleName, residenceStatus, counterLastChance, counterDept, counterAcad, counterProbi, counterInsti) VALUES (@studentNo, @LastName, @firstName, @MiddleName, @residenceStatus, @counterLastChance, @counterDept, @counterAcad , @counterProbi, @counterInsti)", conn))
+                                using (SqlCeCommand command = new SqlCeCommand("Update StudentInfo set CounterInsti = CounterInsti + @counterInsti, CounterDept = CounterDept + @counterDept, CounterAcad = CounterAcad + @counterAcad, CounterLastChance = CounterLastChance + @CounterLastChance, CounterProbi = CounterProbi + @CounterProbi where studentNo = @studentNo", conn))
                                 {
-                                    command.Parameters.AddWithValue("@studentNo", studNo);
-                                    command.Parameters.AddWithValue("@LastName", lastName);
-                                    command.Parameters.AddWithValue("@firstName", firstName);
-                                    command.Parameters.AddWithValue("@MiddleName", middleName);
-                                    command.Parameters.AddWithValue("@residenceStatus", residence);
+
                                     command.Parameters.AddWithValue("@counterInsti", countInsti);
-                                    command.Parameters.AddWithValue("@CounterDept", countDepart);
-                                    command.Parameters.AddWithValue("@CounterAcad", countAcademic);
-                                    command.Parameters.AddWithValue("@CounterProbi", countProbi);
+                                    command.Parameters.AddWithValue("@counterDept", countDepart);
+                                    command.Parameters.AddWithValue("@counterAcad", countAcademic);
+                                    command.Parameters.AddWithValue("@studentNo", txtStudNo.Text);
                                     command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
+                                    command.Parameters.AddWithValue("@CounterProbi", countProbi);
                                     try
                                     {
                                         command.ExecuteNonQuery();
                                         MessageBox.Show("Added Successfully");
                                         Log = LogManager.GetLogger("addStudent");
                                         Log.Info("Student no: " + studNo + " added to database!");
-
                                     }
                                     catch (SqlException ex)
                                     {
                                         Log = LogManager.GetLogger("*");
-                                        Log.Error("Query Error: " + ex);
-
+                                        Log.Error(ex, "Query Error");
                                     }
                                 }
                                 foreach (var violation in violationsHolder)
@@ -655,7 +552,6 @@ namespace SVR_WPF
                                                 violationCode = Convert.ToInt32(reader.GetValue(0));
                                             }
                                         }
-
                                         using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SYint, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SYint, @SY, @Remarks)", conn))
                                         {
                                             command.Parameters.AddWithValue("@StudentNo", studNo);
@@ -669,38 +565,149 @@ namespace SVR_WPF
                                             try
                                             {
                                                 command.ExecuteNonQuery();
-                                                Log = LogManager.GetLogger("addStudent");
-                                                Log.Info("Student no: " + studNo + " records has been added to database!");
+                                                Log = LogManager.GetLogger("studentRecord");
+                                                Log.Info("Student no:" + studNo + " records added to database!");
                                                 emptyTextbox();
                                                 emptyComboBox();
                                             }
                                             catch (SqlException ex)
                                             {
                                                 Log = LogManager.GetLogger("*");
-                                                Log.Error("Query Error: " + ex);
+                                                Log.Error(ex, "Error has been encountered! Log has been updated with the error");
                                                 emptyTextbox();
                                                 emptyComboBox();
                                             }
                                         }
                                     }
+                                    disableFields();
+                                    updateViolations();
+                                    emptyValues();
+                                    violationsHolder.Clear();
+                                    lvViolations.Items.Clear();
+                                    i = 1;
                                 }
-                                disableFields();
-                                updateViolations();
-                                emptyValues();
-                                violationsHolder.Clear();
-                                lvViolations.Items.Clear();
-                                i = 1;
+
                             }
                             else
                             {
-                                MessageBox.Show("Account is not authorize to add new students");
-                                emptyTextbox();
-                                emptyComboBox();
-                                emptyValues();
+                                if (userLevel == 1)
+                                {
+                                    try
+                                    {
+                                        studNo = int.Parse(txtStudNo.Text);
+                                    }
+                                    catch (SqlException ex)
+                                    {
+                                        MessageBox.Show("Query error! Log has been updated with the error");
+                                        Log = LogManager.GetLogger("*");
+                                        Log.Error(ex);
+                                        return;
+                                    }
+                                    string lastName = txtLName.Text;
+                                    string firstName = txtFName.Text;
+                                    string middleName = txtMName.Text;
+                                    string residence = cmbResidence.Text;
+                                    string period = cmbPeriod.Text;
+                                    string schoolYear = cmbSY.Text;
+                                    int sy = int.Parse(schoolYear.Split('-')[0]);
+                                    string remarks;
+                                    if (txtRemarks.Text == "")
+                                    {
+                                        remarks = "None";
+                                    }
+                                    else
+                                    {
+                                        remarks = txtRemarks.Text;
+                                    }
+                                    string date = txtDate.Text;
+
+                                    using (SqlCeCommand command = new SqlCeCommand("INSERT INTO StudentInfo (studentNo, lastName, firstName, middleName, residenceStatus, counterLastChance, counterDept, counterAcad, counterProbi, counterInsti) VALUES (@studentNo, @LastName, @firstName, @MiddleName, @residenceStatus, @counterLastChance, @counterDept, @counterAcad , @counterProbi, @counterInsti)", conn))
+                                    {
+                                        command.Parameters.AddWithValue("@studentNo", studNo);
+                                        command.Parameters.AddWithValue("@LastName", lastName);
+                                        command.Parameters.AddWithValue("@firstName", firstName);
+                                        command.Parameters.AddWithValue("@MiddleName", middleName);
+                                        command.Parameters.AddWithValue("@residenceStatus", residence);
+                                        command.Parameters.AddWithValue("@counterInsti", countInsti);
+                                        command.Parameters.AddWithValue("@CounterDept", countDepart);
+                                        command.Parameters.AddWithValue("@CounterAcad", countAcademic);
+                                        command.Parameters.AddWithValue("@CounterProbi", countProbi);
+                                        command.Parameters.AddWithValue("@CounterLastChance", countLastChance);
+                                        try
+                                        {
+                                            command.ExecuteNonQuery();
+                                            MessageBox.Show("Added Successfully");
+                                            Log = LogManager.GetLogger("addStudent");
+                                            Log.Info("Student no: " + studNo + " added to database!");
+
+                                        }
+                                        catch (SqlException ex)
+                                        {
+                                            Log = LogManager.GetLogger("*");
+                                            Log.Error("Query Error: " + ex);
+
+                                        }
+                                    }
+                                    foreach (var violation in violationsHolder)
+                                    {
+                                        using (SqlCeCommand cmd2 = new SqlCeCommand("Select ViolationCode from ViolationDetails where violationName = @violationName", conn))
+                                        {
+                                            cmd2.Parameters.AddWithValue("@violationName", violation);
+                                            int violationCode = 0;
+                                            using (DbDataReader reader = cmd2.ExecuteResultSet(ResultSetOptions.Scrollable))
+                                            {
+                                                if (reader.HasRows)
+                                                {
+                                                    reader.Read();
+                                                    violationCode = Convert.ToInt32(reader.GetValue(0));
+                                                }
+                                            }
+
+                                            using (SqlCeCommand command = new SqlCeCommand("INSERT INTO RecordDetails (studentNo, ViolationCode, DateCommitted, Period, SYint, SY, Remarks) VALUES (@StudentNo, @ViolationCode, @DateCommitted, @Period, @SYint, @SY, @Remarks)", conn))
+                                            {
+                                                command.Parameters.AddWithValue("@StudentNo", studNo);
+                                                command.Parameters.AddWithValue("@ViolationCode", violationCode);
+                                                command.Parameters.AddWithValue("@DateCommitted", date);
+                                                command.Parameters.AddWithValue("@Period", period);
+                                                command.Parameters.AddWithValue("@SYint", sy);
+                                                command.Parameters.AddWithValue("@SY", schoolYear);
+                                                command.Parameters.AddWithValue("@Remarks", remarks);
+
+                                                try
+                                                {
+                                                    command.ExecuteNonQuery();
+                                                    Log = LogManager.GetLogger("addStudent");
+                                                    Log.Info("Student no: " + studNo + " records has been added to database!");
+                                                    emptyTextbox();
+                                                    emptyComboBox();
+                                                }
+                                                catch (SqlException ex)
+                                                {
+                                                    Log = LogManager.GetLogger("*");
+                                                    Log.Error("Query Error: " + ex);
+                                                    emptyTextbox();
+                                                    emptyComboBox();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    disableFields();
+                                    updateViolations();
+                                    emptyValues();
+                                    violationsHolder.Clear();
+                                    lvViolations.Items.Clear();
+                                    i = 1;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Account is not authorize to add new students");
+                                    emptyTextbox();
+                                    emptyComboBox();
+                                    emptyValues();
+                                }
                             }
                         }
                     }
-
                 }
             }
             else if (value == 2)
