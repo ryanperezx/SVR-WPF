@@ -42,10 +42,6 @@ namespace SVR_WPF
             startTimer();
         }
 
-        public Records()
-        {
-            //for some reason it throws an xaml error when removing this constructor, fix b4 defense thnx
-        }
 
         private void chkNoLC_Checked(object sender, RoutedEventArgs e)
         {
