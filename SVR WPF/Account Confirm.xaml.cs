@@ -4,18 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Data.SqlServerCe;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
 namespace SVR_WPF
 {
-    public partial class Account_Recovery : Window
+    /// <summary>
+    /// Interaction logic for Window1.xaml
+    /// </summary>
+    public partial class Account_Confirm : Window
     {
-
-        public Account_Recovery(string question)
+        public Account_Confirm()
         {
             InitializeComponent();
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
-            lblQuestion.Content = question;
+
         }
 
         private void btnDialogOk_Click(object sender, RoutedEventArgs e)
@@ -23,17 +31,10 @@ namespace SVR_WPF
             this.DialogResult = true;
         }
 
-        private void Window_ContentRendered(object sender, EventArgs e)
+        public string Password
         {
-            txtAnswer.SelectAll();
-            txtAnswer.Focus();
-        }
+            get { return txtPassword.Password; }
 
-        public string Answer
-        {
-            get { return txtAnswer.Text; }
         }
     }
-
-
 }

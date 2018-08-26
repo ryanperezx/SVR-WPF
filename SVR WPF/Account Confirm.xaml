@@ -1,0 +1,24 @@
+﻿<Window x:Class="SVR_WPF.Account_Confirm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SVR_WPF"
+        mc:Ignorable="d"
+        Title="Confirm Add" Height="200" Width="425"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+    <Grid>
+        <Label Content="Please enter your password to authorize the addition of violation :" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="txtPassword" materialDesign:HintAssist.Hint="Password" HorizontalAlignment="Left" Margin="16,41,0,0" VerticalAlignment="Top" Width="147"/>
+        <Button IsDefault="True" x:Name="btnDialogOk" Click="btnDialogOk_Click" MinWidth="60" Margin="16,80,0,57" Content="_Ok" Style="{DynamicResource MaterialDesignRaisedAccentButton}" Height="Auto" HorizontalAlignment="Left" Width="60"/>
+        <Button IsCancel="True" MinWidth="60" Content="_Cancel" Height="Auto" Margin="127,80,0,57" HorizontalAlignment="Left" Width="74"/>
+
+    </Grid>
+</Window>

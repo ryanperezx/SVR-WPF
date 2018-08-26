@@ -10,7 +10,7 @@ namespace SVR_WPF
     public partial class ReportSpecific : Window
     {
         public int studNo;
-        int institutionalCount, departmentalCount, academicCount, probiCount, lastChanceCount;
+        int institutionalCount, departmentalCount, academicCount, probiCount;
         string residence, fullName;
         int i = 1;
         int row = 1, column = 8;
@@ -25,7 +25,7 @@ namespace SVR_WPF
             InitializeComponent();
             this.studNo = studNo;
             conn.Open();
-            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + FirstName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus, CounterLastChance, CounterProbi FROM StudentInfo WHERE StudentNo = @studentNo", conn))
+            using (SqlCeCommand cmd = new SqlCeCommand("SELECT LastName + ', ' + FirstName + ' ' + COALESCE(MiddleName, '') AS [Full Name], ResidenceStatus, CounterProbi FROM StudentInfo WHERE StudentNo = @studentNo", conn))
             {
                 cmd.Parameters.AddWithValue("@studentNo", studNo);
                 using (SqlCeDataReader reader = cmd.ExecuteResultSet(ResultSetOptions.Scrollable))
@@ -41,17 +41,13 @@ namespace SVR_WPF
                         int probiCountIndex = reader.GetOrdinal("CounterProbi");
                         probiCount = Convert.ToInt32(reader.GetValue(probiCountIndex));
 
-                        int lastChanceIndex = reader.GetOrdinal("CounterLastChance");
-                        lastChanceCount = Convert.ToInt32(reader.GetValue(lastChanceIndex));
-
                     }
                 }
             }
             txtStudNo.Text = studNo.ToString();
             txtResidence.Text = residence;
             txtFullName.Text = fullName;
-            txtLC.Text = lastChanceCount.ToString();
-            txtProb.Text = probiCount.ToString();
+            txtProb.Text = AddOrdinal(probiCount);
             updateListView();
         }
 
@@ -452,6 +448,32 @@ namespace SVR_WPF
             object enforceStyleLock = false;
             oDoc.Protect(Word.WdProtectionType.wdAllowOnlyReading, ref noReset, ref password, ref useIRM, ref enforceStyleLock);
             oDoc.PrintOut();
+        }
+
+        private static string AddOrdinal(int num)
+        {
+            if (num <= 0) return num.ToString();
+
+            switch (num % 100)
+            {
+                case 11:
+                case 12:
+                case 13:
+                    return "LAST CHANCE " + "(" + num + "th" + ")";
+            }
+
+            switch (num % 10)
+            {
+                case 1:
+                    return num + "st";
+                case 2:
+                    return num + "nd";
+                case 3:
+                    return "LAST CHANCE " + "(" + num + "rd" + ")";
+                default:
+                    return "LAST CHANCE " + "(" + num + "th" + ")";
+            }
+
         }
     }
 }
