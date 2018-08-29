@@ -132,6 +132,9 @@
     <Compile Include="SearchStudent.xaml.cs">
       <DependentUpon>SearchStudent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Account Confirm.xaml.cs">
+      <DependentUpon>Account Confirm.xaml</DependentUpon>
+    </Compile>
     <Page Include="Account Recovery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -181,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SearchStudent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Account Confirm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

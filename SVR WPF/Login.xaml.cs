@@ -2,6 +2,8 @@
 using System.Windows;
 using NLog;
 using System.Data.SqlServerCe;
+using System.Data.Common;
+
 namespace SVR_WPF
 {
 
@@ -141,19 +143,17 @@ namespace SVR_WPF
                             int ordinal = 0;
 
 
-                            using (SqlCeCommand cmd = new SqlCeCommand("Select * from Accounts where userID = @userID", cnn))
+                            using (SqlCeCommand cmd = new SqlCeCommand("Select securityQuestion, securityAnswer from Accounts where userID = @userID", cnn))
                             {
                                 cmd.Parameters.AddWithValue("@userID", user);
-                                SqlCeDataReader reader = cmd.ExecuteReader();
-
-                                if (reader.Read())
+                                using (DbDataReader reader = cmd.ExecuteReader())
                                 {
+                                    reader.Read();
                                     ordinal = reader.GetOrdinal("securityQuestion");
                                     question = reader.GetString(ordinal);
                                     ordinal = reader.GetOrdinal("securityAnswer");
                                     answer = reader.GetString(ordinal);
                                 }
-                                reader.Close();
                             }
                             Account_Recovery ar = new Account_Recovery(question);
                             if (ar.ShowDialog() == true)

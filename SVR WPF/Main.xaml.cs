@@ -22,7 +22,7 @@ namespace SVR_WPF
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             lblUser.Content = user;
-            Frame.Navigate(new Records(userLevel));
+            Frame.Navigate(new Records(userLevel, user));
             checkAccountLevel();
 
         }
@@ -38,7 +38,7 @@ namespace SVR_WPF
 
         private void tabRecords_OnClick(object sender, MouseButtonEventArgs e)
         {
-            Frame.Navigate(new Records(userLevel));
+            Frame.Navigate(new Records(userLevel, user));
         }
 
         private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)

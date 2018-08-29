@@ -5,7 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVR_WPF"
         mc:Ignorable="d"
-        Title="Account Recovery" Height="198.936" Width="424.468">
+        Title="Account Recovery" Height="198.936" Width="424.468"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37*"/>
@@ -13,9 +21,9 @@
         </Grid.RowDefinitions>
         <Label Name="lblQuestion" FontSize="15" Grid.RowSpan="2">Question:
         </Label>
-        <TextBox Name="txtAnswer" MinWidth="250" Height="31" VerticalAlignment="Bottom" Margin="10,0,10,52.268" GotFocus="txtAnswer_GotFocus" LostFocus="txtAnswer_LostFocus">Answer</TextBox>
+        <TextBox Name="txtAnswer" materialDesign:HintAssist.Hint="Answer" MinWidth="250" Height="31" VerticalAlignment="Bottom" Margin="10,0,10,52.268"/>
 
-        <WrapPanel Margin="10,55,10,0" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2">
+        <WrapPanel Margin="10,55,10,0" Grid.RowSpan="2">
             <Button IsDefault="True" x:Name="btnDialogOk" Click="btnDialogOk_Click" MinWidth="60" Margin="0,20,20,20" Content="_Ok" Style="{DynamicResource MaterialDesignRaisedAccentButton}"/>
             <Button IsCancel="True" MinWidth="60" Content="_Cancel"/>
         </WrapPanel>

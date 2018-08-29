@@ -39,6 +39,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btnGenReport" Content="GENERATE REPORT" Height="40" Margin="535,474,0,0"  Click="btnGenReport_Click" Width="155" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Button x:Name="btnSaveReport" Content="SAVE REPORT" Height="40" Margin="360,474,0,0"  Click="btnSaveReport_Click" Width="154" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Button x:Name="btnPrintReport" Content="PRINT REPORT" Height="40" Margin="674,474,0,0"  Click="btnPrintReport_Click" Width="156" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DefaultBuild|Any CPU = DefaultBuild|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -18,12 +19,16 @@ Global
 		{62E920B9-2741-4697-9340-E74EB97CEA28}.All|Any CPU.Build.0 = Release|Any CPU
 		{62E920B9-2741-4697-9340-E74EB97CEA28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62E920B9-2741-4697-9340-E74EB97CEA28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62E920B9-2741-4697-9340-E74EB97CEA28}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{62E920B9-2741-4697-9340-E74EB97CEA28}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{62E920B9-2741-4697-9340-E74EB97CEA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62E920B9-2741-4697-9340-E74EB97CEA28}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.All|Any CPU.ActiveCfg = DefaultBuild
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.All|Any CPU.Build.0 = DefaultBuild
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.Debug|Any CPU.ActiveCfg = DefaultBuild
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.Debug|Any CPU.Build.0 = DefaultBuild
+		{B2F134E7-768A-442B-BEEE-564D450FF069}.DefaultBuild|Any CPU.ActiveCfg = DefaultBuild
+		{B2F134E7-768A-442B-BEEE-564D450FF069}.DefaultBuild|Any CPU.Build.0 = DefaultBuild
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.Release|Any CPU.ActiveCfg = DefaultBuild
 		{B2F134E7-768A-442B-BEEE-564D450FF069}.Release|Any CPU.Build.0 = DefaultBuild
 	EndGlobalSection
