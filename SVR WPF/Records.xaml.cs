@@ -45,20 +45,6 @@ namespace SVR_WPF
         }
 
 
-        private void chkYesProb_Checked(object sender, RoutedEventArgs e)
-        {
-            if (chkYesProb.IsChecked ?? true)
-            {
-                chkNoProb.IsChecked = false;
-            }
-        }
-        private void chkNoProb_Checked(object sender, RoutedEventArgs e)
-        {
-            if (chkNoProb.IsChecked ?? true)
-            {
-                chkYesProb.IsChecked = false;
-            }
-        }
 
 
         private void cmbViolate_TextChanged(object sender, TextChangedEventArgs e)
@@ -73,9 +59,6 @@ namespace SVR_WPF
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
-                chkYesProb.IsEnabled = false;
-                chkNoProb.IsEnabled = false;
-
                 updateViolations();
 
             }
@@ -88,10 +71,6 @@ namespace SVR_WPF
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
-
-                chkYesProb.IsEnabled = false;
-                chkNoProb.IsEnabled = false;
-
                 updateViolations();
 
             }
@@ -103,17 +82,7 @@ namespace SVR_WPF
                 btnViolateAdd.Visibility = Visibility.Visible;
                 txtRemarks.IsReadOnly = false;
 
-                chkYesProb.IsEnabled = false;
-                chkNoProb.IsEnabled = false;
-
-                chkYesProb.IsChecked = true;
-
                 updateViolations();
-            }
-            else
-            {
-                chkYesProb.IsEnabled = false;
-                chkNoProb.IsEnabled = false;
             }
         }
         private void cmbViolationName_TextChanged(object sender, TextChangedEventArgs e)
@@ -330,12 +299,7 @@ namespace SVR_WPF
                             }
                         }
                     }
-                    if (chkYesProb.IsChecked ?? true)
-                    {
-                        countProbi++;
-                        chkYesProb.IsChecked = false;
-                        chkNoProb.IsChecked = true;
-                    }
+                    countProbi++;
                     cmbViolationName.SelectedIndex = -1;
                     countAcademic++;
                 }
@@ -1047,9 +1011,6 @@ namespace SVR_WPF
             cmbPeriod.IsEnabled = false;
             cmbSY.IsEnabled = false;
             cmbViolate.IsEnabled = false;
-
-            chkYesProb.IsEnabled = false;
-            chkNoProb.IsEnabled = false;
 
             btnViolateAdd.IsEnabled = false;
             btnViolateAdd.Visibility = Visibility.Hidden;
