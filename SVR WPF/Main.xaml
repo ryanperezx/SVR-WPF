@@ -58,12 +58,12 @@
 
                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Label x:Name="lblUser" Content="User" VerticalAlignment="Center" FontSize="16" Foreground="White"/>
-                    <materialDesign:ComboBoxPopup HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
+                    <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Width="55" StaysOpen="False">
                         <StackPanel Width="150">
                             <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="ButtonPopUpLogout_Click"/>
                             <Button x:Name="ButtonPopUpExit" Content="Exit" Click="ButtonPopUpExit_Click"/>
                         </StackPanel>
-                    </materialDesign:ComboBoxPopup>
+                    </materialDesign:PopupBox>
                 </StackPanel>
             </Grid>
         </materialDesign:Card>

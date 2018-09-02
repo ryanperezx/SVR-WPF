@@ -139,10 +139,6 @@
 
                             <Label x:Name="lblRemarks" Content="Remarks :" RenderTransformOrigin="0.183,0.577" Grid.Row="1" Margin="8,23,134,149" />
                             <TextBox x:Name="txtRemarks" Grid.Row="1" Margin="85,10,10,158" RenderTransformOrigin="0.33,0.739" IsReadOnly="True"/>
-                            <Label x:Name="lblProbi" Content="Probationary :" Grid.Row="1" Margin="10,71,116,103" />
-                            <CheckBox x:Name="chkYesProb" Content="Yes" RenderTransformOrigin="0.333,2.444" Checked="chkYesProb_Checked" Grid.Row="1" Margin="120,71,54,103"/>
-                            <CheckBox x:Name="chkNoProb" Content="No" RenderTransformOrigin="0.333,2.444" Checked="chkNoProb_Checked" Grid.Row="1" Margin="170,71,10,103" IsChecked="True"/>
-
                             <ListView x:Name="lvViolations" Height="182" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1" Margin="31,10,100,0">
                                 <ListView.View>
                                     <GridView>
